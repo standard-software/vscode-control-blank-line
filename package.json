@@ -1,0 +1,63 @@
+{
+  "name": "vscode-control-blank-line",
+  "displayName": "Control Blank Line",
+  "description": "Control by increasing or decreasing empty or blank lines.",
+  "version": "1.0.0",
+  "publisher": "SatoshiYamamoto",
+  "author": {
+    "name": "Satoshi Yamamoto",
+    "email": "standard.software.net@gmail.com",
+    "url": "https://www.facebook.com/stndardsoftware"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/standard-software/vscode-control-blank-line"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "empty line",
+    "blank line"
+  ],
+  "activationEvents": [
+    "onCommand:ControlBlankLine.DeleteBlankLines",
+    "onCommand:ControlBlankLine.CombineBlankLinesOne",
+    "onCommand:ControlBlankLine.DecreaseBlankLinesOne",
+    "onCommand:ControlBlankLine.IncreaseBlankLinesOne"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ControlBlankLine.DeleteBlankLines",
+        "title": "Control Blank Line : Delete Blank Lines"
+      },
+      {
+        "command": "ControlBlankLine.CombineBlankLinesOne",
+        "title": "Control Blank Line : Combine Blank Lines into One Line"
+      },
+      {
+        "command": "ControlBlankLine.DecreaseBlankLinesOne",
+        "title": "Control Blank Line : Decrease Blank Lines by One"
+      },
+      {
+        "command": "ControlBlankLine.IncreaseBlankLinesOne",
+        "title": "Control Blank Line : Increase Blank Lines by One"
+      }
+    ],
+    "configuration": {}
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "": ""
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "glob": "^7.1.7"
+  }
+}
