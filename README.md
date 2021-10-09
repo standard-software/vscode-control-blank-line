@@ -7,6 +7,29 @@
 
 This Control Blank Line extension has the ability to remove, increase, decrease, and combine blank lines into one line.
 
+## Usage
+
+Following commands are available:
+
+- `Control Blank Line : Combine Blank Lines into One Line`
+- `Control Blank Line : Delete Blank Lines`
+- `Control Blank Line : Decrease Blank Lines by One`
+- `Control Blank Line : Increase Blank Lines by One`
+
+## Preview
+
+Control Blank Line : Combine Blank Lines into One Line
+![](./images/animegif/combine.gif)
+
+Control Blank Line : Delete Blank Lines
+![](./images/animegif/delete.gif)
+
+Control Blank Line : Decrease Blank Lines by One
+![](./images/animegif/decrease.gif)
+
+Control Blank Line : Increase Blank Lines by One
+![](./images/animegif/increase.gif)
+
 ## Install
 
 Search for "Control Blank Line" in the Marketplace  
@@ -15,14 +38,6 @@ https://marketplace.visualstudio.com/vscode
 or here  
 https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line
 
-## Usage
-
-Following commands are available:
-
-- `Control Blank Line : Delete Blank Lines`
-- `Control Blank Line : Combine Blank Lines into One Line`
-- `Control Blank Line : Decrease Blank Lines by One`
-- `Control Blank Line : Increase Blank Lines by One`
 
 ## License
 
@@ -44,6 +59,7 @@ Released under the [MIT License][license].
 - Refactoring
 - DecreaseBlankLinesOne update
   - Delete one blank line group
+- README Preview Anime gif
 
 ### 1.0.0
 2021/10/07(Thu)
