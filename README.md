@@ -54,6 +54,11 @@ Released under the [MIT License][license].
 
 ## Version
 
+### 1.2.1
+2021/10/09(Sat)
+- update Control Blank Line : Delete Blank Lines
+  - last \n bug fix
+
 ### 1.2.0
 2021/10/09(Sat)
 - update Combine Blank Lines into One Line

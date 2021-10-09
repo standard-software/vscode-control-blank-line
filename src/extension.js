@@ -93,7 +93,7 @@ function activate(context) {
 
         case `DecreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const lines = text.split(`\n`);
+            const lines = _excludeLast(text, '\n').split(`\n`);
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ''})
             );
