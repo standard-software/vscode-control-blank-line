@@ -1,4 +1,7 @@
 const vscode = require('vscode');
+const {
+  _excludeLast,
+} = require('./parts.js')
 
 function activate(context) {
 
@@ -51,7 +54,7 @@ function activate(context) {
 
         case `CombineBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const lines = text.split(`\n`);
+            const lines = _excludeLast(text, '\n').split(`\n`);
             if (lines.length <= 1) { return; }
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ''})

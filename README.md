@@ -54,10 +54,15 @@ Released under the [MIT License][license].
 
 ## Version
 
+### 1.2.0
+2021/10/09(Sat)
+- update Combine Blank Lines into One Line
+  - last \n bug fix
+
 ### 1.1.0
 2021/10/09(Sat)
 - Refactoring
-- DecreaseBlankLinesOne update
+- update DecreaseBlankLinesOne
   - Delete one blank line group
 - README Preview Anime gif
 
