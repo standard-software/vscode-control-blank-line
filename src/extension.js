@@ -38,33 +38,25 @@ function activate(context) {
 
         case `DeleteBlankLines`:
           editorSelectionsLoop((range, text) => {
-            const blankLineIndexArray = [];
             const lines = text.split(`\n`);
-            for (let i = 0; i < lines.length; i += 1) {
-              if (lines[i].trim() === '') {
-                blankLineIndexArray.push(i);
-              }
-            };
-            blankLineIndexArray.reverse();
-            for (let i = 0; i < blankLineIndexArray.length; i += 1) {
-              array_deleteIndex(lines, blankLineIndexArray[i]);
-            }
+            const blankLineInfoArray = lines.map(
+              (l, i) => ({index: i, blank: l.trim() === ''})
+            );
+            blankLineInfoArray.filter(info => info.blank).reverse().forEach(info => {
+              array_deleteIndex(lines, info.index);
+            });
             ed.replace(range, lines.join('\n'));
           })
           break;
 
         case `CombineBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const blankLineInfoArray = [];
             const lines = text.split(`\n`);
             if (lines.length <= 1) { return; }
-            for (let i = 0; i < lines.length; i += 1) {
-              if (lines[i].trim() === '') {
-                blankLineInfoArray.push({index: i, blank: true})
-              } else {
-                blankLineInfoArray.push({index: i, blank: false})
-              }
-            };
+            const blankLineInfoArray = lines.map(
+              (l, i) => ({index: i, blank: l.trim() === ''})
+            );
+
             const blankLineContinueInfoArray = blankLineInfoArray.map(
               (info, index) => {
                 if (info.blank === false) { return {...info, continue: false}; }
@@ -80,92 +72,64 @@ function activate(context) {
                 }
               }
             );
-            blankLineContinueInfoArray.reverse();
 
             let continueFlag = false;
-            for (let i = 0; i < blankLineContinueInfoArray.length; i += 1) {
-              if (blankLineContinueInfoArray[i].continue) {
+            blankLineContinueInfoArray.reverse().forEach(info => {
+              if (info.continue) {
                 if (continueFlag === true) {
-                  array_deleteIndex(lines, blankLineContinueInfoArray[i].index);
+                  array_deleteIndex(lines, info.index);
                 }
                 continueFlag = true;
               } else {
                 continueFlag = false;
               }
-            }
+            });
             ed.replace(range, lines.join('\n'));
           })
           break;
 
         case `DecreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const blankLineInfoArray = [];
             const lines = text.split(`\n`);
-            if (lines.length <= 1) { return; }
-            for (let i = 0; i < lines.length; i += 1) {
-              if (lines[i].trim() === '') {
-                blankLineInfoArray.push({index: i, blank: true})
-              } else {
-                blankLineInfoArray.push({index: i, blank: false})
-              }
-            };
-            const blankLineContinueInfoArray = blankLineInfoArray.map(
-              (info, index) => {
-                if (info.blank === false) { return {...info, continue: false}; }
-                if (index === 0) {
-                  return {...info, continue: blankLineInfoArray[1].blank};
-                } else if (index === blankLineInfoArray.length - 1) {
-                  return {...info, continue: blankLineInfoArray[blankLineInfoArray.length - 2].blank};
-                } else {
-                  return {...info, continue: (
-                    blankLineInfoArray[index - 1].blank
-                    || blankLineInfoArray[index + 1].blank
-                  )} ;
-                }
-              }
+            const blankLineInfoArray = lines.map(
+              (l, i) => ({index: i, blank: l.trim() === ''})
             );
-            blankLineContinueInfoArray.reverse();
-
-            let continueFlag = false;
-            for (let i = 0; i < blankLineContinueInfoArray.length; i += 1) {
-              if (blankLineContinueInfoArray[i].continue) {
-                if (continueFlag === false) {
-                  array_deleteIndex(lines, blankLineContinueInfoArray[i].index);
+            let blankFlag = false;
+            blankLineInfoArray.reverse().forEach(info => {
+              if (info.blank) {
+                if (blankFlag === false) {
+                  array_deleteIndex(lines, info.index);
                 }
-                continueFlag = true;
+                blankFlag = true;
               } else {
-                continueFlag = false;
+                blankFlag = false;
               }
-            }
+            });
             ed.replace(range, lines.join('\n'));
           })
           break;
 
         case `IncreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const blankLineInfoArray = [];
             const lines = text.split(`\n`);
-            if (lines.length <= 1) { return; }
-            for (let i = 0; i < lines.length; i += 1) {
-              if (lines[i].trim() === '') {
-                blankLineInfoArray.push({index: i, blank: true})
-              } else {
-                blankLineInfoArray.push({index: i, blank: false})
-              }
-            };
-            blankLineInfoArray.reverse();
-
+            const blankLineInfoArray = lines.map(
+              (l, i) => ({index: i, blank: l.trim() === ''})
+            );
             let blankFlag = false;
-            for (let i = 0; i < blankLineInfoArray.length; i += 1) {
-              if (blankLineInfoArray[i].blank) {
+            blankLineInfoArray.reverse().forEach(info => {
+              if (info.blank) {
                 if (blankFlag === false) {
-                  array_add(lines, [lines[blankLineInfoArray[i].index]], blankLineInfoArray[i].index);
+                  array_add(
+                    lines,
+                    [lines[info.index]],
+                    info.index,
+                  )
                 }
                 blankFlag = true;
               } else {
                 blankFlag = false;
               }
-            }
+            });
             ed.replace(range, lines.join('\n'));
           })
           break;

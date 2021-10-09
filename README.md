@@ -39,9 +39,15 @@ Released under the [MIT License][license].
 
 ## Version
 
+### 1.1.0
+2021/10/09(Sat)
+- Refactoring
+- DecreaseBlankLinesOne update
+  - Delete one blank line group
+
 ### 1.0.0
 2021/10/07(Thu)
-- publish
+- First Release
 
 - DeleteBlankLines
 - CombineBlankLinesOne

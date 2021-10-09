@@ -2,7 +2,7 @@
   "name": "vscode-control-blank-line",
   "displayName": "Control Blank Line",
   "description": "Control by increasing or decreasing empty or blank lines.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "SatoshiYamamoto",
   "author": {
     "name": "Satoshi Yamamoto",
