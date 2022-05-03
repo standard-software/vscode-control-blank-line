@@ -2,7 +2,8 @@
   "name": "vscode-control-blank-line",
   "displayName": "Control Blank Line",
   "description": "Control by increasing or decreasing empty or blank lines.",
-  "version": "1.2.1",
+  "version": "1.3.0",
+  "icon": "vscode-control-blank-line_icon.png",
   "publisher": "SatoshiYamamoto",
   "author": {
     "name": "Satoshi Yamamoto",
@@ -54,10 +55,11 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "pack": "vsce package && code --install-extension vscode-control-blank-line-1.3.0.vsix",
     "": ""
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "glob": "^7.1.7"
+    "vsce": "^2.7.0"
   }
 }

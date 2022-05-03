@@ -11,10 +11,12 @@ This Control Blank Line extension has the ability to remove, increase, decrease,
 
 Following commands are available:
 
-- `Control Blank Line : Combine Blank Lines into One Line`
-- `Control Blank Line : Delete Blank Lines`
-- `Control Blank Line : Decrease Blank Lines by One`
-- `Control Blank Line : Increase Blank Lines by One`
+```
+- Control Blank Line : Combine Blank Lines into One Line
+- Control Blank Line : Delete Blank Lines
+- Control Blank Line : Decrease Blank Lines by One
+- Control Blank Line : Increase Blank Lines by One
+```
 
 ## Preview
 
@@ -32,12 +34,7 @@ Control Blank Line : Increase Blank Lines by One
 
 ## Install
 
-Search for "Control Blank Line" in the Marketplace  
-https://marketplace.visualstudio.com/vscode
-
-or here  
 https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line
-
 
 ## License
 
@@ -53,6 +50,11 @@ Released under the [MIT License][license].
 [license]: https://github.com/standard-software/vscode-control-blank-line/blob/master/LICENSE
 
 ## Version
+
+### 1.3.0
+2022/05/03 Tue
+- Update README
+- Set title icon
 
 ### 1.2.1
 2021/10/09(Sat)
