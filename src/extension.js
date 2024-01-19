@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const {
   _excludeLast,
-} = require('./parts.js')
+} = require('./parts/parts.js')
 
 function activate(context) {
 
