@@ -1,4 +1,4 @@
-const { __max } = require('./parts/array/__max.js')
+const { __max } = require('../array/__max.js')
 
 const _indexOfLast = (
   str, search, indexStart = __max([0, str.length - 1]),

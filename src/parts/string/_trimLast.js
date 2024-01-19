@@ -1,5 +1,5 @@
-const { isUndefined } = require('./parts/type/isUndefined.js')
-const { _findFirst } = require('./parts/array/_findFirst.js')
+const { isUndefined } = require('../type/isUndefined.js')
+const { _findFirst } = require('../array/_findFirst.js')
 const { _isLast } = require('./_isLast.js')
 const { _deleteLast } = require('./_deleteLast.js')
 
