@@ -8,6 +8,8 @@
   - Menu Name
 - Update .vscodeignore
   - extension size down
+- Update src folder structure
+- Update eslint
 
 ## [1.3.0] - 2022/05/03 Tue
 - Update README
