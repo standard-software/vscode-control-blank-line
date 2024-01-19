@@ -1,7 +1,7 @@
 const { isUndefined } = require(`../type/isUndefined.js`);
 const { _findFirst } = require(`../array/_findFirst.js`);
-const { _isFirst } = require(`./_isFirst.js`);
-const { _deleteFirst } = require(`./_deleteFirst.js`);
+const { _isFirst } = require(`../string/_isFirst.js`);
+const { _deleteFirst } = require(`../string/_deleteFirst.js`);
 
 const _trimFirst = (
   str,

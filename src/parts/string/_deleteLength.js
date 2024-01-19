@@ -1,4 +1,4 @@
-const { _deleteIndex } = require(`./_deleteIndex.js`);
+const { _deleteIndex } = require(`../string/_deleteIndex.js`);
 
 const _deleteLength = (
   str, index, length = str.length - index,

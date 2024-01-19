@@ -1,4 +1,4 @@
-const { _deleteLength } = require(`./_deleteLength.js`);
+const { _deleteLength } = require(`../string/_deleteLength.js`);
 
 const _deleteFirst = (str, length = 1) => {
   return _deleteLength(

@@ -1,4 +1,4 @@
-const { _indexOfLast } = require(`./_indexOfLast.js`);
+const { _indexOfLast } = require(`../string/_indexOfLast.js`);
 
 const _isLast = (str, search) => {
   const result = _indexOfLast(str, search);
