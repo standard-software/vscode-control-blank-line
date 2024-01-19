@@ -4,4 +4,4 @@ const isNumber = (value) => {
 
 module.exports = {
   isNumber
-}
+};

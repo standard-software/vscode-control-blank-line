@@ -1,5 +1,5 @@
-const { _isLast } = require(`./_isLast.js`)
-const { _deleteLast } = require(`./_deleteLast.js`)
+const { _isLast } = require(`./_isLast.js`);
+const { _deleteLast } = require(`./_deleteLast.js`);
 
 const _excludeLast = (str, value) => {
   if (_isLast(str, value)) {
@@ -8,4 +8,4 @@ const _excludeLast = (str, value) => {
   return str;
 };
 
-module.exports = { _excludeLast }
+module.exports = { _excludeLast };

@@ -1,7 +1,7 @@
-const { isUndefined } = require(`../type/isUndefined.js`)
-const { _findFirst } = require(`../array/_findFirst.js`)
-const { _isFirst } = require(`./_isFirst.js`)
-const { _deleteFirst } = require(`./_deleteFirst.js`)
+const { isUndefined } = require(`../type/isUndefined.js`);
+const { _findFirst } = require(`../array/_findFirst.js`);
+const { _isFirst } = require(`./_isFirst.js`);
+const { _deleteFirst } = require(`./_deleteFirst.js`);
 
 const _trimFirst = (
   str,
@@ -19,4 +19,4 @@ const _trimFirst = (
   return str;
 };
 
-module.exports = { _trimFirst }
+module.exports = { _trimFirst };

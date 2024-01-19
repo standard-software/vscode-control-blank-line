@@ -1,7 +1,7 @@
 const vscode = require(`vscode`);
 const {
   _excludeLast,
-} = require(`./parts/parts.js`)
+} = require(`./parts/parts.js`);
 
 function activate(context) {
 
@@ -35,7 +35,7 @@ function activate(context) {
           const text = editor.document.getText(range);
           func(range, text);
         });
-      }
+      };
 
       switch (commandName) {
 
@@ -49,7 +49,7 @@ function activate(context) {
               array_deleteIndex(lines, info.index);
             });
             ed.replace(range, lines.join(`\n`));
-          })
+          });
           break;
 
         case `CombineBlankLinesOne`:
@@ -88,7 +88,7 @@ function activate(context) {
               }
             });
             ed.replace(range, lines.join(`\n`));
-          })
+          });
           break;
 
         case `DecreaseBlankLinesOne`:
@@ -109,7 +109,7 @@ function activate(context) {
               }
             });
             ed.replace(range, lines.join(`\n`));
-          })
+          });
           break;
 
         case `IncreaseBlankLinesOne`:
@@ -126,7 +126,7 @@ function activate(context) {
                     lines,
                     [lines[info.index]],
                     info.index,
-                  )
+                  );
                 }
                 blankFlag = true;
               } else {
@@ -134,7 +134,7 @@ function activate(context) {
               }
             });
             ed.replace(range, lines.join(`\n`));
-          })
+          });
           break;
 
         default:
@@ -142,7 +142,7 @@ function activate(context) {
       }
     } );
 
-  }
+  };
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -179,4 +179,4 @@ function deactivate() {}
 module.exports = {
   activate,
   deactivate
-}
+};

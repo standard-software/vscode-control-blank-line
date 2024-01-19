@@ -1,4 +1,4 @@
-const { __max } = require(`../array/__max.js`)
+const { __max } = require(`../array/__max.js`);
 
 const _indexOfLast = (
   str, search, indexStart = __max([0, str.length - 1]),
@@ -9,4 +9,4 @@ const _indexOfLast = (
   return str.lastIndexOf(search, indexStart);
 };
 
-module.exports = { _indexOfLast }
+module.exports = { _indexOfLast };

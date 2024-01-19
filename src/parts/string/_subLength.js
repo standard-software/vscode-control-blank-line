@@ -4,4 +4,4 @@ const _subLength = (
   return str.substring(index, index + length);
 };
 
-module.exports = { _subLength }
+module.exports = { _subLength };

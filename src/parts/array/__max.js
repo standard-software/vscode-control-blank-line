@@ -1,4 +1,4 @@
-const { isNumber } = require(`../type/isNumber.js`)
+const { isNumber } = require(`../type/isNumber.js`);
 
 const __max = (array) => {
   if (array.length === 0) {
@@ -18,4 +18,4 @@ const __max = (array) => {
   return result;
 };
 
-module.exports = { __max }
+module.exports = { __max };

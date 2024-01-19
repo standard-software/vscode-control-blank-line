@@ -1,4 +1,4 @@
-const { _findFirstIndex } = require(`./_findFirstIndex.js`)
+const { _findFirstIndex } = require(`./_findFirstIndex.js`);
 
 const _findFirst = (array, func) => {
   const resultIndex = _findFirstIndex(array, func);
@@ -8,4 +8,4 @@ const _findFirst = (array, func) => {
   return array[resultIndex];
 };
 
-module.exports = { _findFirst }
+module.exports = { _findFirst };

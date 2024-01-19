@@ -6,4 +6,4 @@ const _deleteIndex = (
   return startStr + endStr;
 };
 
-module.exports = { _deleteIndex }
+module.exports = { _deleteIndex };

@@ -1,4 +1,4 @@
-const { _indexOfLast } = require(`./_indexOfLast.js`)
+const { _indexOfLast } = require(`./_indexOfLast.js`);
 
 const _isLast = (str, search) => {
   const result = _indexOfLast(str, search);
@@ -8,4 +8,4 @@ const _isLast = (str, search) => {
   return result === str.length - search.length;
 };
 
-module.exports = { _isLast }
+module.exports = { _isLast };

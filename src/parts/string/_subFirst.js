@@ -1,4 +1,4 @@
-const { _subLength } = require(`./_subLength.js`)
+const { _subLength } = require(`./_subLength.js`);
 
 const _subFirst = (str, length = 1) => {
   return _subLength(
@@ -6,4 +6,4 @@ const _subFirst = (str, length = 1) => {
   );
 };
 
-module.exports = { _subFirst }
+module.exports = { _subFirst };

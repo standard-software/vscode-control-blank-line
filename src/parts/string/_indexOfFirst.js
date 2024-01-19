@@ -5,4 +5,4 @@ const _indexOfFirst = (str, search, indexStart) => {
   return str.indexOf(search, indexStart);
 };
 
-module.exports = { _indexOfFirst }
+module.exports = { _indexOfFirst };

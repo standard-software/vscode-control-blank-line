@@ -1,4 +1,4 @@
-const { _deleteLength } = require(`./_deleteLength.js`)
+const { _deleteLength } = require(`./_deleteLength.js`);
 
 const _deleteLast = (str, length = 1) => {
   return _deleteLength(
@@ -6,4 +6,4 @@ const _deleteLast = (str, length = 1) => {
   );
 };
 
-module.exports = { _deleteLast }
+module.exports = { _deleteLast };

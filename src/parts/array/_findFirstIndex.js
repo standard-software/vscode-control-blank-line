@@ -1,4 +1,4 @@
-const { isBoolean } = require(`../type/isBoolean.js`)
+const { isBoolean } = require(`../type/isBoolean.js`);
 
 const _findFirstIndex = (array, func) => {
   for (let i = 0, l = array.length; i < l; i += 1) {
@@ -15,4 +15,4 @@ const _findFirstIndex = (array, func) => {
   return -1;
 };
 
-module.exports = { _findFirstIndex }
+module.exports = { _findFirstIndex };

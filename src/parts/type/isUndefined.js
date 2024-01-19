@@ -1,3 +1,3 @@
 const isUndefined = (value) => typeof value === `undefined`;
 
-module.exports = { isUndefined }
+module.exports = { isUndefined };
