@@ -1,5 +1,5 @@
 const _indexOfFirst = (str, search, indexStart) => {
-  if (search === '') {
+  if (search === ``) {
     return -1;
   }
   return str.indexOf(search, indexStart);

@@ -1,4 +1,4 @@
-const { _indexOfFirst } = require('./_indexOfFirst.js')
+const { _indexOfFirst } = require(`./_indexOfFirst.js`)
 
 const _isFirst = (str, search) => {
   return _indexOfFirst(str, search) === 0;

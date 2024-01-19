@@ -1,4 +1,4 @@
-const { isNumber } = require('../type/isNumber.js')
+const { isNumber } = require(`../type/isNumber.js`)
 
 const __max = (array) => {
   if (array.length === 0) {
@@ -8,7 +8,7 @@ const __max = (array) => {
   for (let i = 0, l = array.length; i < l; i += 1) {
     if (!isNumber(array[i])) {
       throw new TypeError(
-        '__max args(array) element is not number',
+        `__max args(array) element is not number`,
       );
     }
     if (result < array[i]) {

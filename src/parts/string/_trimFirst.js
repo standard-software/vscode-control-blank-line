@@ -1,11 +1,11 @@
-const { isUndefined } = require('../type/isUndefined.js')
-const { _findFirst } = require('../array/_findFirst.js')
-const { _isFirst } = require('./_isFirst.js')
-const { _deleteFirst } = require('./_deleteFirst.js')
+const { isUndefined } = require(`../type/isUndefined.js`)
+const { _findFirst } = require(`../array/_findFirst.js`)
+const { _isFirst } = require(`./_isFirst.js`)
+const { _deleteFirst } = require(`./_deleteFirst.js`)
 
 const _trimFirst = (
   str,
-  valueArray = [' ', '\t', '\r', '\n'],
+  valueArray = [` `, `\t`, `\r`, `\n`],
 ) => {
   while (true) {
     const value = _findFirst(

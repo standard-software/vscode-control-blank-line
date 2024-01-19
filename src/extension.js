@@ -1,7 +1,7 @@
-const vscode = require('vscode');
+const vscode = require(`vscode`);
 const {
   _excludeLast,
-} = require('./parts/parts.js')
+} = require(`./parts/parts.js`)
 
 function activate(context) {
 
@@ -43,21 +43,21 @@ function activate(context) {
           editorSelectionsLoop((range, text) => {
             const lines = text.split(`\n`);
             const blankLineInfoArray = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ''})
+              (l, i) => ({index: i, blank: l.trim() === ``})
             );
             blankLineInfoArray.filter(info => info.blank).reverse().forEach(info => {
               array_deleteIndex(lines, info.index);
             });
-            ed.replace(range, lines.join('\n'));
+            ed.replace(range, lines.join(`\n`));
           })
           break;
 
         case `CombineBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const lines = _excludeLast(text, '\n').split(`\n`);
+            const lines = _excludeLast(text, `\n`).split(`\n`);
             if (lines.length <= 1) { return; }
             const blankLineInfoArray = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ''})
+              (l, i) => ({index: i, blank: l.trim() === ``})
             );
 
             const blankLineContinueInfoArray = blankLineInfoArray.map(
@@ -87,15 +87,15 @@ function activate(context) {
                 continueFlag = false;
               }
             });
-            ed.replace(range, lines.join('\n'));
+            ed.replace(range, lines.join(`\n`));
           })
           break;
 
         case `DecreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const lines = _excludeLast(text, '\n').split(`\n`);
+            const lines = _excludeLast(text, `\n`).split(`\n`);
             const blankLineInfoArray = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ''})
+              (l, i) => ({index: i, blank: l.trim() === ``})
             );
             let blankFlag = false;
             blankLineInfoArray.reverse().forEach(info => {
@@ -108,7 +108,7 @@ function activate(context) {
                 blankFlag = false;
               }
             });
-            ed.replace(range, lines.join('\n'));
+            ed.replace(range, lines.join(`\n`));
           })
           break;
 
@@ -116,7 +116,7 @@ function activate(context) {
           editorSelectionsLoop((range, text) => {
             const lines = text.split(`\n`);
             const blankLineInfoArray = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ''})
+              (l, i) => ({index: i, blank: l.trim() === ``})
             );
             let blankFlag = false;
             blankLineInfoArray.reverse().forEach(info => {
@@ -133,7 +133,7 @@ function activate(context) {
                 blankFlag = false;
               }
             });
-            ed.replace(range, lines.join('\n'));
+            ed.replace(range, lines.join(`\n`));
           })
           break;
 
