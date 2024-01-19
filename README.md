@@ -1,11 +1,11 @@
-# VSCode extension - Control Blank Line
+# Control Blank Line
 
-[![Version][version-badge]][marketplace]
-[![Ratings][ratings-badge]][marketplace-ratings]
-[![Installs][installs-badge]][marketplace]
-[![License][license-badge]][license]
+[![](https://vsmarketplacebadges.dev/version-short/SatoshiYamamoto.vscode-control-blank-line.png)](https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line)
+[![](https://vsmarketplacebadges.dev/installs-short/SatoshiYamamoto.vscode-control-blank-line.png)](https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line)
+[![](https://vsmarketplacebadges.dev/rating-short/SatoshiYamamoto.vscode-control-blank-line.png)](https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line)
+[![](https://img.shields.io/github/license/standard-software/vscode-date-time-calendar.png)](https://github.com/standard-software/vscode-date-time-calendar/blob/main/LICENSE)
 
-This Control Blank Line extension has the ability to remove, increase, decrease, and combine blank lines into one line.
+Control Blank Line extension has the ability to remove, increase, decrease, and combine blank lines into one line.
 
 ## Usage
 
@@ -40,44 +40,3 @@ https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-contr
 
 Released under the [MIT License][license].
 
-[version-badge]: https://vsmarketplacebadge.apphb.com/version/SatoshiYamamoto.vscode-control-blank-line.svg
-[ratings-badge]: https://vsmarketplacebadge.apphb.com/rating/SatoshiYamamoto.vscode-control-blank-line.svg
-[installs-badge]: https://vsmarketplacebadge.apphb.com/installs/SatoshiYamamoto.vscode-control-blank-line.svg
-[license-badge]: https://img.shields.io/github/license/standard-software/vscode-control-blank-line.svg
-
-[marketplace]: https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line
-[marketplace-ratings]: https://marketplace.visualstudio.com/items?itemName=SatoshiYamamoto.vscode-control-blank-line#review-details
-[license]: https://github.com/standard-software/vscode-control-blank-line/blob/master/LICENSE
-
-## Version
-
-### 1.3.0
-2022/05/03 Tue
-- Update README
-- Set title icon
-
-### 1.2.1
-2021/10/09(Sat)
-- update Control Blank Line : Delete Blank Lines
-  - last \n bug fix
-
-### 1.2.0
-2021/10/09(Sat)
-- update Combine Blank Lines into One Line
-  - last \n bug fix
-
-### 1.1.0
-2021/10/09(Sat)
-- Refactoring
-- update DecreaseBlankLinesOne
-  - Delete one blank line group
-- README Preview Anime gif
-
-### 1.0.0
-2021/10/07(Thu)
-- First Release
-
-- DeleteBlankLines
-- CombineBlankLinesOne
-- DecreaseBlankLinesOne
-- IncreaseBlankLinesOne
