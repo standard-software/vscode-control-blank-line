@@ -1,4 +1,4 @@
-const { isUndefined } = require('./isUndefined.js')
+const { isUndefined } = require('./parts/type/isUndefined.js')
 const { _findFirst } = require('./_findFirst.js')
 const { _isLast } = require('./_isLast.js')
 const { _deleteLast } = require('./_deleteLast.js')

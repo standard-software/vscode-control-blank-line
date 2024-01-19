@@ -1,4 +1,4 @@
-const { isNumber } = require('./isNumber.js')
+const { isNumber } = require('./parts/type/isNumber.js')
 
 const __max = (array) => {
   if (array.length === 0) {

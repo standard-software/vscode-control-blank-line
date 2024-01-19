@@ -1,4 +1,4 @@
-const { isBoolean } = require('./isBoolean.js')
+const { isBoolean } = require('./parts/type/isBoolean.js')
 
 const _findFirstIndex = (array, func) => {
   for (let i = 0, l = array.length; i < l; i += 1) {
