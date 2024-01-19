@@ -2,7 +2,10 @@
 
 ## [1.4.0] - 2024/01/19 Fri
 - Update README
+  - Delete ./image
 - add .vscode
+- Update package.json
+  - Menu Name
 
 ## [1.3.0] - 2022/05/03 Tue
 - Update README

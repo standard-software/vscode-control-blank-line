@@ -25,30 +25,24 @@
     "empty line",
     "blank line"
   ],
-  "activationEvents": [
-    "onCommand:ControlBlankLine.DeleteBlankLines",
-    "onCommand:ControlBlankLine.CombineBlankLinesOne",
-    "onCommand:ControlBlankLine.DecreaseBlankLinesOne",
-    "onCommand:ControlBlankLine.IncreaseBlankLinesOne"
-  ],
   "main": "./src/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "ControlBlankLine.DeleteBlankLines",
-        "title": "Control Blank Line : Delete Blank Lines"
+        "command": "ControlBlankLine.DecreaseBlankLinesOne",
+        "title": "Control Blank Line : Delete : Decrease One Line"
       },
       {
         "command": "ControlBlankLine.CombineBlankLinesOne",
-        "title": "Control Blank Line : Combine Blank Lines into One Line"
+        "title": "Control Blank Line : Delete : Combine One Line"
       },
       {
-        "command": "ControlBlankLine.DecreaseBlankLinesOne",
-        "title": "Control Blank Line : Decrease Blank Lines by One"
+        "command": "ControlBlankLine.DeleteBlankLines",
+        "title": "Control Blank Line : Delete : All"
       },
       {
         "command": "ControlBlankLine.IncreaseBlankLinesOne",
-        "title": "Control Blank Line : Increase Blank Lines by One"
+        "title": "Control Blank Line : Add : Increase One Line"
       }
     ],
     "configuration": {}

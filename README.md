@@ -12,25 +12,25 @@ Control Blank Line extension has the ability to remove, increase, decrease, and 
 Following commands are available:
 
 ```
-- Control Blank Line : Combine Blank Lines into One Line
-- Control Blank Line : Delete Blank Lines
-- Control Blank Line : Decrease Blank Lines by One
-- Control Blank Line : Increase Blank Lines by One
+- Control Blank Line : Delete : Decrease One Line
+- Control Blank Line : Delete : Combine One Line
+- Control Blank Line : Delete : All
+- Control Blank Line : Add : Increase One Line
 ```
 
 ## Preview
 
-Control Blank Line : Combine Blank Lines into One Line
-![](./images/animegif/combine.gif)
+Control Blank Line : Delete : Decrease One Line
+![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/decrease.gif)
 
-Control Blank Line : Delete Blank Lines
-![](./images/animegif/delete.gif)
+Control Blank Line : Delete : Combine One Line
+![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/combine.gif)
 
-Control Blank Line : Decrease Blank Lines by One
-![](./images/animegif/decrease.gif)
+Control Blank Line : Delete : All
+![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/delete.gif)
 
-Control Blank Line : Increase Blank Lines by One
-![](./images/animegif/increase.gif)
+Control Blank Line : Add : Increase One Line
+![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/increase.gif)
 
 ## Install
 
