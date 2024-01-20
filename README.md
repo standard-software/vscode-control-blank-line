@@ -15,6 +15,7 @@ Following commands are available:
 - Control Blank Line : Delete : Decrease One Line
 - Control Blank Line : Delete : Combine One Line
 - Control Blank Line : Delete : All
+- Control Blank Line : Delete : Auto
 - Control Blank Line : Add : Increase One Line
 ```
 

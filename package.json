@@ -42,6 +42,10 @@
         "title": "Control Blank Line : Delete : All"
       },
       {
+        "command": "ControlBlankLine.DeleteAuto",
+        "title": "Control Blank Line : Delete : Auto"
+      },
+      {
         "command": "ControlBlankLine.IncreaseBlankLinesOne",
         "title": "Control Blank Line : Add : Increase One Line"
       }

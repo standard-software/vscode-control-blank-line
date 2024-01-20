@@ -1,5 +1,6 @@
 const vscode = require(`vscode`);
 const {
+  _isLast,
   _excludeLast,
 } = require(`./parts/parts.js`);
 
@@ -38,6 +39,78 @@ function activate(context) {
       };
 
       switch (commandName) {
+
+        case `DeleteAuto`: {
+          editorSelectionsLoop((range, text) => {
+
+            // no select
+            if (text === ``) { return; }
+
+            const isLastLf = _isLast(text, `\n`);
+            const lines = _excludeLast(text, `\n`).split(`\n`);
+            // console.log(`DeleteAuto`, text, text===`\n`, lines);
+
+            if (lines.length === 0) { new Error(`extensionMain`); }
+
+            // select one line
+            if (lines.length === 1) {
+              if (lines[0] === ``) {
+                ed.replace(range, ``);
+              }
+              return;
+            }
+
+            // select over two lines
+            const blankLineInfoArray = lines.map(
+              (l, i) => ({index: i, blank: l.trim() === ``})
+            );
+
+            const blankLineContinueInfoArray = blankLineInfoArray.map(
+              (info, index) => {
+                if (info.blank === false) { return {...info, continue: false}; }
+                if (index === 0) {
+                  return {...info, continue: blankLineInfoArray[1].blank};
+                } else if (index === blankLineInfoArray.length - 1) {
+                  return {...info, continue: blankLineInfoArray[blankLineInfoArray.length - 2].blank};
+                } else {
+                  return {...info, continue: (
+                    blankLineInfoArray[index - 1].blank
+                    || blankLineInfoArray[index + 1].blank
+                  )} ;
+                }
+              }
+            );
+
+            if (blankLineContinueInfoArray.some(info => info.continue)) {
+              // exists continue blank line -> decrease one
+              let continueFlag = false;
+              for (
+                const info of blankLineContinueInfoArray
+                .reverse()
+              ) {
+                if (info.continue) {
+                  if (continueFlag === false) {
+                    array_deleteIndex(lines, info.index);
+                  }
+                  continueFlag = true;
+                } else {
+                  continueFlag = false;
+                }
+              };
+            } else {
+              // no exists continue blank line -> delete
+              for (
+                const info of blankLineInfoArray
+                .filter(info => info.blank)
+                .reverse()
+              ) {
+                array_deleteIndex(lines, info.index);
+              };
+            }
+
+            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+          });
+        }; break;
 
         case `DeleteBlankLines`:
           editorSelectionsLoop((range, text) => {
@@ -143,6 +216,13 @@ function activate(context) {
     } );
 
   };
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      `ControlBlankLine.DeleteAuto`, () => {
+      extensionMain(`DeleteAuto`);
+    })
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
