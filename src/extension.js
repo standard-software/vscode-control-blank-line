@@ -1,5 +1,12 @@
 const vscode = require(`vscode`);
+
 const {
+  registerCommand,
+  getEditor,
+} = require(`./lib/libVSCode.js`);
+
+const {
+  isUndefined,
   _isLast,
   _excludeLast,
 } = require(`./parts/parts.js`);
@@ -8,11 +15,20 @@ function activate(context) {
 
   const extensionMain = (commandName) => {
 
-    const editor = vscode.window.activeTextEditor;
-    if ( !editor ) {
-      vscode.window.showInformationMessage(`No editor is active.`);
-      return;
-    }
+    const editor = getEditor(); if (!editor) { return; }
+
+    const editorSelectionsLoop = (ed, func) => {
+      for(const select of editor.selections) {
+        const range = new vscode.Range(
+          select.start.line, 0, select.end.line, select.end.character
+        );
+        const text = editor.document.getText(range);
+        const result = func(range, text);
+        if (isUndefined(result)) { continue; }
+        if (text === result) { continue; }
+        if (ed.replace(range, result)) {}
+      };
+    };
 
     editor.edit(ed => {
 
@@ -28,20 +44,12 @@ function activate(context) {
         return array;
       };
 
-      const editorSelectionsLoop = (func) => {
-        editor.selections.forEach(select => {
-          const range = new vscode.Range(
-            select.start.line, 0, select.end.line, select.end.character
-          );
-          const text = editor.document.getText(range);
-          func(range, text);
-        });
-      };
+
 
       switch (commandName) {
 
         case `DeleteAuto`: {
-          editorSelectionsLoop((range, text) => {
+          editorSelectionsLoop(ed, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -55,7 +63,8 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                ed.replace(range, ``);
+                // ed.replace(range, ``);
+                return ``;
               }
               return;
             }
@@ -108,12 +117,13 @@ function activate(context) {
               };
             }
 
-            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `DeleteBlankLines`: {
-          editorSelectionsLoop((range, text) => {
+          editorSelectionsLoop(ed, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -126,7 +136,8 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                ed.replace(range, ``);
+                // ed.replace(range, ``);
+                return ``;
               }
               return;
             }
@@ -144,12 +155,13 @@ function activate(context) {
               array_deleteIndex(lines, info.index);
             }
 
-            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `CombineBlankLinesOne`: {
-          editorSelectionsLoop((range, text) => {
+          editorSelectionsLoop(ed, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -204,12 +216,13 @@ function activate(context) {
               array_deleteIndex(lines, index);
             }
 
-            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `DecreaseBlankLinesOne`: {
-          editorSelectionsLoop((range, text) => {
+          editorSelectionsLoop(ed, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -222,7 +235,8 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                ed.replace(range, ``);
+                // ed.replace(range, ``);
+                return ``;
               }
               return;
             }
@@ -247,12 +261,13 @@ function activate(context) {
               }
             };
 
-            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `IncreaseBlankLinesOne`:
-          editorSelectionsLoop((range, text) => {
+          editorSelectionsLoop(ed, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -300,7 +315,8 @@ function activate(context) {
               }
             }
 
-            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
           break;
 
@@ -311,39 +327,29 @@ function activate(context) {
 
   };
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      `ControlBlankLine.DeleteAuto`, () => {
-      extensionMain(`DeleteAuto`);
-    })
+  registerCommand(context,
+    `ControlBlankLine.DeleteAuto`,
+    () => { extensionMain(`DeleteAuto`); }
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      `ControlBlankLine.DeleteBlankLines`, () => {
-      extensionMain(`DeleteBlankLines`);
-    })
+  registerCommand(context,
+    `ControlBlankLine.DeleteBlankLines`,
+    () => { extensionMain(`DeleteBlankLines`); },
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      `ControlBlankLine.CombineBlankLinesOne`, () => {
-      extensionMain(`CombineBlankLinesOne`);
-    })
+  registerCommand(context,
+    `ControlBlankLine.CombineBlankLinesOne`,
+    () => { extensionMain(`CombineBlankLinesOne`); },
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      `ControlBlankLine.DecreaseBlankLinesOne`, () => {
-      extensionMain(`DecreaseBlankLinesOne`);
-    })
+  registerCommand(context,
+    `ControlBlankLine.DecreaseBlankLinesOne`,
+    () => { extensionMain(`DecreaseBlankLinesOne`); },
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      `ControlBlankLine.IncreaseBlankLinesOne`, () => {
-      extensionMain(`IncreaseBlankLinesOne`);
-    })
+  registerCommand(context,
+    `ControlBlankLine.IncreaseBlankLinesOne`,
+    () => { extensionMain(`IncreaseBlankLinesOne`); },
   );
 
 }
