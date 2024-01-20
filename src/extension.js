@@ -197,7 +197,10 @@ function activate(context) {
                 continueFlag = false;
               }
             };
-            for (const index of deleteIndexs.reverse()) {
+            for (
+              const index of deleteIndexs
+              .reverse()
+            ) {
               array_deleteIndex(lines, index);
             }
 
@@ -205,14 +208,35 @@ function activate(context) {
           });
         }; break;
 
-        case `DecreaseBlankLinesOne`:
+        case `DecreaseBlankLinesOne`: {
           editorSelectionsLoop((range, text) => {
+
+            // no select
+            if (text === ``) { return; }
+
+            const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
+
+            if (lines.length === 0) { new Error(`extensionMain`); }
+
+            // select one line
+            if (lines.length === 1) {
+              if (lines[0].trim() === ``) {
+                ed.replace(range, ``);
+              }
+              return;
+            }
+
+            // select over two lines
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
+
             let blankFlag = false;
-            blankLineInfoArray.reverse().forEach(info => {
+            for (
+              const info of blankLineInfoArray
+              .reverse()
+            ) {
               if (info.blank) {
                 if (blankFlag === false) {
                   array_deleteIndex(lines, info.index);
@@ -221,10 +245,11 @@ function activate(context) {
               } else {
                 blankFlag = false;
               }
-            });
-            ed.replace(range, lines.join(`\n`));
+            };
+
+            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
           });
-          break;
+        }; break;
 
         case `IncreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
