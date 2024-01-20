@@ -57,31 +57,31 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfoArray = lines.map(
+            const blankLineInfos = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
 
-            const blankLineContinueInfoArray = blankLineInfoArray.map(
+            const blankLineContinueInfos = blankLineInfos.map(
               (info, index) => {
                 if (info.blank === false) { return {...info, continue: false}; }
                 if (index === 0) {
-                  return {...info, continue: blankLineInfoArray[1].blank};
-                } else if (index === blankLineInfoArray.length - 1) {
-                  return {...info, continue: blankLineInfoArray[blankLineInfoArray.length - 2].blank};
+                  return {...info, continue: blankLineInfos[1].blank};
+                } else if (index === blankLineInfos.length - 1) {
+                  return {...info, continue: blankLineInfos[blankLineInfos.length - 2].blank};
                 } else {
                   return {...info, continue: (
-                    blankLineInfoArray[index - 1].blank
-                    || blankLineInfoArray[index + 1].blank
+                    blankLineInfos[index - 1].blank
+                    || blankLineInfos[index + 1].blank
                   )} ;
                 }
               }
             );
 
-            if (blankLineContinueInfoArray.some(info => info.continue)) {
+            if (blankLineContinueInfos.some(info => info.continue)) {
               // exists continue blank line -> decrease one
               let continueFlag = false;
               for (
-                const info of blankLineContinueInfoArray
+                const info of blankLineContinueInfos
                 .reverse()
               ) {
                 if (info.continue) {
@@ -96,7 +96,7 @@ function activate(context) {
             } else {
               // no exists continue blank line -> delete
               for (
-                const info of blankLineInfoArray
+                const info of blankLineInfos
                 .filter(info => info.blank)
                 .reverse()
               ) {
@@ -128,12 +128,12 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfoArray = lines.map(
+            const blankLineInfos = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
 
             for (
-              const info of blankLineInfoArray
+              const info of blankLineInfos
               .filter(info => info.blank)
               .reverse()
             ) {
@@ -159,21 +159,21 @@ function activate(context) {
             if (lines.length === 1) { return; }
 
             // select over two lines
-            const blankLineInfoArray = lines.map(
+            const blankLineInfos = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
 
-            const blankLineContinueInfoArray = blankLineInfoArray.map(
+            const blankLineContinueInfoArray = blankLineInfos.map(
               (info, index) => {
                 if (info.blank === false) { return {...info, continue: false}; }
                 if (index === 0) {
-                  return {...info, continue: blankLineInfoArray[1].blank};
-                } else if (index === blankLineInfoArray.length - 1) {
-                  return {...info, continue: blankLineInfoArray[blankLineInfoArray.length - 2].blank};
+                  return {...info, continue: blankLineInfos[1].blank};
+                } else if (index === blankLineInfos.length - 1) {
+                  return {...info, continue: blankLineInfos[blankLineInfos.length - 2].blank};
                 } else {
                   return {...info, continue: (
-                    blankLineInfoArray[index - 1].blank
-                    || blankLineInfoArray[index + 1].blank
+                    blankLineInfos[index - 1].blank
+                    || blankLineInfos[index + 1].blank
                   )} ;
                 }
               }
@@ -224,13 +224,13 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfoArray = lines.map(
+            const blankLineInfos = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
 
             let blankFlag = false;
             for (
-              const info of blankLineInfoArray
+              const info of blankLineInfos
               .reverse()
             ) {
               if (info.blank) {
