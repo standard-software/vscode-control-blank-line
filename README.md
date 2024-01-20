@@ -19,19 +19,173 @@ Following commands are available:
 - Control Blank Line : Add : Increase One Line
 ```
 
-## Preview
+## Detail, Execution example
 
-Control Blank Line : Delete : Decrease One Line
-![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/decrease.gif)
+### Control Blank Line : Delete : Decrease One Line
 
-Control Blank Line : Delete : Combine One Line
-![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/combine.gif)
+```
+---
 
-Control Blank Line : Delete : All
-![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/delete.gif)
+  item 1
+  
 
-Control Blank Line : Add : Increase One Line
-![](https://raw.githubusercontent.com/standard-software/vscode-control-blank-line/main/images/animegif/increase.gif)
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+    
+  item 2
+    item 2-1
+    item 2-2
+
+---
+```
+↓
+```
+---
+  item 1
+  
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+  item 2
+    item 2-1
+    item 2-2
+---
+```
+
+## Control Blank Line : Delete : Combine One Line
+
+```
+---
+
+  item 1
+  
+
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+    
+  item 2
+    item 2-1
+    item 2-2
+
+---
+```
+↓
+```
+---
+
+  item 1
+  
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  item 2
+    item 2-1
+    item 2-2
+
+---
+```
+
+## Control Blank Line : Delete : All
+
+```
+---
+
+  item 1
+  
+
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+    
+  item 2
+    item 2-1
+    item 2-2
+
+---
+```
+↓
+```
+---
+  item 1
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+  item 2
+    item 2-1
+    item 2-2
+---
+```
+
+### Control Blank Line : Delete : Auto
+
+- If there are consecutive blank lines, reduce one blank line from the block
+- If there is only a single blank line, delete the blank lines.
+
+If this function is performed consecutively, it is as if [Delete : Decrease One Line], [Delete : Combine One Line], and [Delete : All] were all performed.
+
+
+### Control Blank Line : Add : Increase One Line
+
+```
+---
+
+  item 1
+  
+
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+    
+  item 2
+    item 2-1
+    item 2-2
+
+---
+```
+↓
+```
+---
+
+
+  item 1
+  
+
+
+    item 1-1
+      item 1-1-1
+      item 1-1-2
+    item 1-2
+
+  
+    
+    
+  item 2
+    item 2-1
+    item 2-2
+
+
+---
+```
 
 ## Install
 
