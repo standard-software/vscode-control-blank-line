@@ -54,7 +54,7 @@ function activate(context) {
 
             // select one line
             if (lines.length === 1) {
-              if (lines[0] === ``) {
+              if (lines[0].trim() === ``) {
                 ed.replace(range, ``);
               }
               return;
@@ -112,18 +112,41 @@ function activate(context) {
           });
         }; break;
 
-        case `DeleteBlankLines`:
+        case `DeleteBlankLines`: {
           editorSelectionsLoop((range, text) => {
-            const lines = text.split(`\n`);
+
+            // no select
+            if (text === ``) { return; }
+
+            const isLastLf = _isLast(text, `\n`);
+            const lines = _excludeLast(text, `\n`).split(`\n`);
+
+            if (lines.length === 0) { new Error(`extensionMain`); }
+
+            // select one line
+            if (lines.length === 1) {
+              if (lines[0].trim() === ``) {
+                ed.replace(range, ``);
+              }
+              return;
+            }
+
+            // select over two lines
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
-            blankLineInfoArray.filter(info => info.blank).reverse().forEach(info => {
+
+            for (
+              const info of blankLineInfoArray
+              .filter(info => info.blank)
+              .reverse()
+            ) {
               array_deleteIndex(lines, info.index);
-            });
-            ed.replace(range, lines.join(`\n`));
+            }
+
+            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
           });
-          break;
+        }; break;
 
         case `CombineBlankLinesOne`: {
           editorSelectionsLoop((range, text) => {
