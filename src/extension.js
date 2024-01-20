@@ -253,12 +253,39 @@ function activate(context) {
 
         case `IncreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
-            const lines = text.split(`\n`);
+
+            // no select
+            if (text === ``) { return; }
+
+            const isLastLf = _isLast(text, `\n`);
+            const lines = _excludeLast(text, `\n`).split(`\n`);
+
+            if (lines.length === 0) { new Error(`extensionMain`); }
+
+            // select one line
+            if (lines.length === 1) {
+              if (lines[0].trim() === ``) {
+                array_add(
+                  lines,
+                  [lines[0]],
+                  0,
+                );
+
+                ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+              }
+              return;
+            }
+
+            // select over two lines
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
+
             let blankFlag = false;
-            blankLineInfoArray.reverse().forEach(info => {
+            for (
+              const info of blankLineInfoArray
+              .reverse()
+            ) {
               if (info.blank) {
                 if (blankFlag === false) {
                   array_add(
@@ -271,8 +298,9 @@ function activate(context) {
               } else {
                 blankFlag = false;
               }
-            });
-            ed.replace(range, lines.join(`\n`));
+            }
+
+            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
           });
           break;
 
