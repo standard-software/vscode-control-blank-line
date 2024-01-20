@@ -28,6 +28,7 @@
   "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
+    "configuration": {},
     "commands": [
       {
         "command": "ControlBlankLine.DecreaseBlankLinesOne",
@@ -50,7 +51,13 @@
         "title": "Control Blank Line : Add : Increase One Line"
       }
     ],
-    "configuration": {}
+    "keybindings": [
+      {
+        "command": "ControlBlankLine.DeleteAuto",
+        "key": "alt+ctrl+d",
+        "when": "editorTextFocus"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint --fix ./src",

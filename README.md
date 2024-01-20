@@ -19,7 +19,13 @@ Following commands are available:
 - Control Blank Line : Add : Increase One Line
 ```
 
-## Detail, Execution example
+### Default Key
+
+| Command                             | Default Key Windows     | Default Key Mac         |
+|-                                    |-                        | -                       |
+| Control Blank Line : Delete : Auto  | Alt + Ctrl + d          | Opt + Ctrl +  d         |
+
+## Usage, Execution example
 
 ### Control Blank Line : Delete : Decrease One Line
 

@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.4.0] - 2024/01/19 Fri
+## [1.4.0] - 2024/01/20 Sat
 - Update README
   - Delete ./image/
 - add .vscode
@@ -11,6 +11,8 @@
 - Update src folder structure
 - Update eslint
 - Add Delete Auto
+  - Default Key binding
+- Update Other Function
 
 ## [1.3.0] - 2022/05/03 Tue
 - Update README
