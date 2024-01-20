@@ -125,10 +125,21 @@ function activate(context) {
           });
           break;
 
-        case `CombineBlankLinesOne`:
+        case `CombineBlankLinesOne`: {
           editorSelectionsLoop((range, text) => {
+
+            // no select
+            if (text === ``) { return; }
+
+            const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
-            if (lines.length <= 1) { return; }
+
+            if (lines.length === 0) { new Error(`extensionMain`); }
+
+            // select one line
+            if (lines.length === 1) { return; }
+
+            // select over two lines
             const blankLineInfoArray = lines.map(
               (l, i) => ({index: i, blank: l.trim() === ``})
             );
@@ -149,20 +160,27 @@ function activate(context) {
               }
             );
 
+            const deleteIndexs = [];
             let continueFlag = false;
-            blankLineContinueInfoArray.reverse().forEach(info => {
+            for (
+              const info of blankLineContinueInfoArray
+            ) {
               if (info.continue) {
                 if (continueFlag === true) {
-                  array_deleteIndex(lines, info.index);
-                }
+                  deleteIndexs.push(info.index);
+               }
                 continueFlag = true;
               } else {
                 continueFlag = false;
               }
-            });
-            ed.replace(range, lines.join(`\n`));
+            };
+            for (const index of deleteIndexs.reverse()) {
+              array_deleteIndex(lines, index);
+            }
+
+            ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
           });
-          break;
+        }; break;
 
         case `DecreaseBlankLinesOne`:
           editorSelectionsLoop((range, text) => {
