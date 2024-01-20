@@ -12,6 +12,39 @@ const {
   array,
 } = require(`./parts/parts.js`);
 
+const getBlankLineInfos = ({ lines, continueInfo }) => {
+  if (lines.length <= 1) {
+    throw new Error(`extension:control-blank-line`);
+  }
+
+  const blankLineInfos = lines.map(
+    (l, i) => ({index: i, blank: l.trim() === ``})
+  );
+
+  if (continueInfo === false) {
+    return blankLineInfos;
+  }
+
+  const blankLineContinueInfos = blankLineInfos.map(
+    (info, index) => {
+      if (info.blank === false) { return {...info, continue: false}; }
+      if (index === 0) {
+        return {...info, continue: blankLineInfos[1].blank};
+      } else if (index === blankLineInfos.length - 1) {
+        return {...info, continue: blankLineInfos[blankLineInfos.length - 2].blank};
+      } else {
+        return {...info, continue: (
+          blankLineInfos[index - 1].blank
+          || blankLineInfos[index + 1].blank
+        )} ;
+      }
+    }
+  );
+
+  return blankLineContinueInfos;
+};
+
+
 function activate(context) {
 
   const extensionMain = (commandName) => {
@@ -46,7 +79,9 @@ function activate(context) {
             const lines = _excludeLast(text, `\n`).split(`\n`);
             // console.log(`DeleteAuto`, text, text===`\n`, lines);
 
-            if (lines.length === 0) { new Error(`extensionMain`); }
+            if (lines.length === 0) {
+              throw new Error(`extension:control-blank-line`);
+            }
 
             // select one line
             if (lines.length === 1) {
@@ -57,31 +92,15 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfos = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ``})
-            );
+            const blankLineInfos = getBlankLineInfos({
+              lines, continueInfo: true
+            });
 
-            const blankLineContinueInfos = blankLineInfos.map(
-              (info, index) => {
-                if (info.blank === false) { return {...info, continue: false}; }
-                if (index === 0) {
-                  return {...info, continue: blankLineInfos[1].blank};
-                } else if (index === blankLineInfos.length - 1) {
-                  return {...info, continue: blankLineInfos[blankLineInfos.length - 2].blank};
-                } else {
-                  return {...info, continue: (
-                    blankLineInfos[index - 1].blank
-                    || blankLineInfos[index + 1].blank
-                  )} ;
-                }
-              }
-            );
-
-            if (blankLineContinueInfos.some(info => info.continue)) {
+            if (blankLineInfos.some(info => info.continue)) {
               // exists continue blank line -> decrease one
               let continueFlag = false;
               for (
-                const info of blankLineContinueInfos
+                const info of blankLineInfos
                 .reverse()
               ) {
                 if (info.continue) {
@@ -117,7 +136,9 @@ function activate(context) {
             const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
 
-            if (lines.length === 0) { new Error(`extensionMain`); }
+            if (lines.length === 0) {
+              throw new Error(`extension:control-blank-line`);
+            }
 
             // select one line
             if (lines.length === 1) {
@@ -128,9 +149,9 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfos = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ``})
-            );
+            const blankLineInfos = getBlankLineInfos({
+              lines, continueInfo: false
+            });
 
             for (
               const info of blankLineInfos
@@ -153,36 +174,22 @@ function activate(context) {
             const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
 
-            if (lines.length === 0) { new Error(`extensionMain`); }
+            if (lines.length === 0) {
+              throw new Error(`extension:control-blank-line`);
+            }
 
             // select one line
             if (lines.length === 1) { return; }
 
             // select over two lines
-            const blankLineInfos = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ``})
-            );
-
-            const blankLineContinueInfoArray = blankLineInfos.map(
-              (info, index) => {
-                if (info.blank === false) { return {...info, continue: false}; }
-                if (index === 0) {
-                  return {...info, continue: blankLineInfos[1].blank};
-                } else if (index === blankLineInfos.length - 1) {
-                  return {...info, continue: blankLineInfos[blankLineInfos.length - 2].blank};
-                } else {
-                  return {...info, continue: (
-                    blankLineInfos[index - 1].blank
-                    || blankLineInfos[index + 1].blank
-                  )} ;
-                }
-              }
-            );
+            const blankLineInfos = getBlankLineInfos({
+              lines, continueInfo: true
+            });
 
             const deleteIndexs = [];
             let continueFlag = false;
             for (
-              const info of blankLineContinueInfoArray
+              const info of blankLineInfos
             ) {
               if (info.continue) {
                 if (continueFlag === true) {
@@ -213,7 +220,9 @@ function activate(context) {
             const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
 
-            if (lines.length === 0) { new Error(`extensionMain`); }
+            if (lines.length === 0) {
+              throw new Error(`extension:control-blank-line`);
+            }
 
             // select one line
             if (lines.length === 1) {
@@ -224,9 +233,9 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfos = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ``})
-            );
+            const blankLineInfos = getBlankLineInfos({
+              lines, continueInfo: false
+            });
 
             let blankFlag = false;
             for (
@@ -247,7 +256,7 @@ function activate(context) {
           });
         }; break;
 
-        case `IncreaseBlankLinesOne`:
+        case `IncreaseBlankLinesOne`: {
           editorSelectionsLoop(edit, (range, text) => {
 
             // no select
@@ -256,7 +265,9 @@ function activate(context) {
             const isLastLf = _isLast(text, `\n`);
             const lines = _excludeLast(text, `\n`).split(`\n`);
 
-            if (lines.length === 0) { new Error(`extensionMain`); }
+            if (lines.length === 0) {
+              throw new Error(`extension:control-blank-line`);
+            }
 
             // select one line
             if (lines.length === 1) {
@@ -273,13 +284,13 @@ function activate(context) {
             }
 
             // select over two lines
-            const blankLineInfoArray = lines.map(
-              (l, i) => ({index: i, blank: l.trim() === ``})
-            );
+            const blankLineInfos = getBlankLineInfos({
+              lines, continueInfo: false
+            });
 
             let blankFlag = false;
             for (
-              const info of blankLineInfoArray
+              const info of blankLineInfos
               .reverse()
             ) {
               if (info.blank) {
@@ -298,10 +309,12 @@ function activate(context) {
 
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
-          break;
+        }; break;
 
-        default:
-          new Error(`extensionMain`);
+        default: {
+          throw new Error(`extension:control-blank-line`);
+        };
+
       }
     } );
 
