@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.4.2] - 2024/01/21 Sun
+- Refactoring
+
 ## [1.4.1] - 2024/01/21 Sun
 - Refactoring
 - Update Delete Auto

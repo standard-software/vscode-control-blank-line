@@ -9,6 +9,7 @@ const {
   isUndefined,
   _isLast,
   _excludeLast,
+  array,
 } = require(`./parts/parts.js`);
 
 function activate(context) {
@@ -20,7 +21,8 @@ function activate(context) {
     const editorSelectionsLoop = (edit, func) => {
       for(const select of editor.selections) {
         const range = new vscode.Range(
-          select.start.line, 0, select.end.line, select.end.character
+          select.start.line, 0,
+          select.end.line, select.end.character
         );
         const text = editor.document.getText(range);
         const result = func(range, text);
@@ -31,18 +33,6 @@ function activate(context) {
     };
 
     editor.edit(edit => {
-
-      const array_deleteIndex = (
-        array, indexStart, indexEnd = indexStart,
-      ) => {
-        array.splice(indexStart, indexEnd - indexStart + 1);
-        return array;
-      };
-
-      const array_add = (array, valueArray, index = array.length - 1) => {
-        array.splice(index + 1, 0, ...valueArray);
-        return array;
-      };
 
       switch (commandName) {
 
@@ -96,7 +86,7 @@ function activate(context) {
               ) {
                 if (info.continue) {
                   if (continueFlag === false) {
-                    array_deleteIndex(lines, info.index);
+                    array._deleteIndex(lines, info.index);
                   }
                   continueFlag = true;
                 } else {
@@ -110,7 +100,7 @@ function activate(context) {
                 .filter(info => info.blank)
                 .reverse()
               ) {
-                array_deleteIndex(lines, info.index);
+                array._deleteIndex(lines, info.index);
               };
             }
 
@@ -147,7 +137,7 @@ function activate(context) {
               .filter(info => info.blank)
               .reverse()
             ) {
-              array_deleteIndex(lines, info.index);
+              array._deleteIndex(lines, info.index);
             }
 
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
@@ -207,7 +197,7 @@ function activate(context) {
               const index of deleteIndexs
               .reverse()
             ) {
-              array_deleteIndex(lines, index);
+              array._deleteIndex(lines, index);
             }
 
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
@@ -245,7 +235,7 @@ function activate(context) {
             ) {
               if (info.blank) {
                 if (blankFlag === false) {
-                  array_deleteIndex(lines, info.index);
+                  array._deleteIndex(lines, info.index);
                 }
                 blankFlag = true;
               } else {
@@ -271,7 +261,7 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                array_add(
+                array._add(
                   lines,
                   [lines[0]],
                   0,
@@ -294,7 +284,7 @@ function activate(context) {
             ) {
               if (info.blank) {
                 if (blankFlag === false) {
-                  array_add(
+                  array._add(
                     lines,
                     [lines[info.index]],
                     info.index,

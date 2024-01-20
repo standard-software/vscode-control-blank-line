@@ -20,6 +20,10 @@ const { _subLast } = require(`./string/_subLast.js`);
 const { _insert } = require(`./string/_insert.js`);
 const { _excludeLast } = require(`./string/_excludeLast.js`);
 
+const array = {};
+array._deleteIndex = require(`./array/operation/_deleteIndex.js`)._deleteIndex;
+array._add = require(`./array/operation/_add.js`)._add;
+
 module.exports = {
   isUndefined, isBoolean, isNumber,
   __max,
@@ -33,4 +37,5 @@ module.exports = {
   _subFirst, _subLast,
   _insert,
   _excludeLast,
+  array,
 };
