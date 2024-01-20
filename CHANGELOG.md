@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.4.1] - 2024/01/21 Sun
+- Refactoring
+- Update Delete Auto
+  - Do not update Undo if there is no conversion
+
 ## [1.4.0] - 2024/01/20 Sat
 - Update README
   - Delete ./image/

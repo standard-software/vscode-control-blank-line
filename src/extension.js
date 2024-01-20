@@ -17,7 +17,7 @@ function activate(context) {
 
     const editor = getEditor(); if (!editor) { return; }
 
-    const editorSelectionsLoop = (ed, func) => {
+    const editorSelectionsLoop = (edit, func) => {
       for(const select of editor.selections) {
         const range = new vscode.Range(
           select.start.line, 0, select.end.line, select.end.character
@@ -26,11 +26,11 @@ function activate(context) {
         const result = func(range, text);
         if (isUndefined(result)) { continue; }
         if (text === result) { continue; }
-        if (ed.replace(range, result)) {}
+        if (edit.replace(range, result)) {}
       };
     };
 
-    editor.edit(ed => {
+    editor.edit(edit => {
 
       const array_deleteIndex = (
         array, indexStart, indexEnd = indexStart,
@@ -44,12 +44,10 @@ function activate(context) {
         return array;
       };
 
-
-
       switch (commandName) {
 
         case `DeleteAuto`: {
-          editorSelectionsLoop(ed, (range, text) => {
+          editorSelectionsLoop(edit, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -63,7 +61,6 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                // ed.replace(range, ``);
                 return ``;
               }
               return;
@@ -117,13 +114,12 @@ function activate(context) {
               };
             }
 
-            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `DeleteBlankLines`: {
-          editorSelectionsLoop(ed, (range, text) => {
+          editorSelectionsLoop(edit, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -136,7 +132,6 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                // ed.replace(range, ``);
                 return ``;
               }
               return;
@@ -155,13 +150,12 @@ function activate(context) {
               array_deleteIndex(lines, info.index);
             }
 
-            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `CombineBlankLinesOne`: {
-          editorSelectionsLoop(ed, (range, text) => {
+          editorSelectionsLoop(edit, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -216,13 +210,12 @@ function activate(context) {
               array_deleteIndex(lines, index);
             }
 
-            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `DecreaseBlankLinesOne`: {
-          editorSelectionsLoop(ed, (range, text) => {
+          editorSelectionsLoop(edit, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -235,7 +228,6 @@ function activate(context) {
             // select one line
             if (lines.length === 1) {
               if (lines[0].trim() === ``) {
-                // ed.replace(range, ``);
                 return ``;
               }
               return;
@@ -261,13 +253,12 @@ function activate(context) {
               }
             };
 
-            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
         }; break;
 
         case `IncreaseBlankLinesOne`:
-          editorSelectionsLoop(ed, (range, text) => {
+          editorSelectionsLoop(edit, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -286,7 +277,7 @@ function activate(context) {
                   0,
                 );
 
-                ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
+                return lines.join(`\n`) + (isLastLf ? `\n` : ``);
               }
               return;
             }
@@ -315,7 +306,6 @@ function activate(context) {
               }
             }
 
-            // ed.replace(range, lines.join(`\n`) + (isLastLf ? `\n` : ``));
             return lines.join(`\n`) + (isLastLf ? `\n` : ``);
           });
           break;
