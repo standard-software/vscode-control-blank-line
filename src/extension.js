@@ -55,7 +55,12 @@ function activate(context) {
       const runAfterSelections = [];
       editor.edit(edit => {
         let startLineOffset = 0;
-        for(const [i, select] of editor.selections.entries()) {
+        for(
+          const select of [...editor.selections]
+          .sort((a, b) => {
+            return a.start.line - b.start.line;
+          })
+        ) {
           const range = new vscode.Range(
             select.start.line, 0,
             select.end.line,

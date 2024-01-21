@@ -2,6 +2,7 @@
 
 ## [1.4.2] - 2024/01/21 Sun
 - Refactoring
+- fix multi select problem
 
 ## [1.4.1] - 2024/01/21 Sun
 - Refactoring
