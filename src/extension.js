@@ -107,7 +107,6 @@ function activate(context) {
 
           const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
-          // console.log(`DeleteAuto`, text, text===`\n`, lines);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);

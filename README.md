@@ -7,7 +7,7 @@
 
 Control Blank Line extension has the ability to remove, increase, decrease, and combine blank lines into one line.
 
-## Usage
+## Commands
 
 Following commands are available:
 
@@ -19,13 +19,13 @@ Following commands are available:
 - Control Blank Line : Add : Increase One Line
 ```
 
-### Default Key
+## Default Key binding
 
 | Command                             | Default Key Windows     | Default Key Mac         |
 |-                                    |-                        | -                       |
 | Control Blank Line : Delete : Auto  | Alt + Ctrl + d          | Opt + Ctrl +  d         |
 
-## Usage, Execution example
+## Execution example
 
 ### Control Blank Line : Delete : Decrease One Line
 
@@ -65,7 +65,9 @@ Following commands are available:
 ---
 ```
 
-## Control Blank Line : Delete : Combine One Line
+---
+
+### Control Blank Line : Delete : Combine One Line
 
 ```
 ---
@@ -104,7 +106,9 @@ Following commands are available:
 ---
 ```
 
-## Control Blank Line : Delete : All
+---
+
+### Control Blank Line : Delete : All
 
 ```
 ---
@@ -138,14 +142,22 @@ Following commands are available:
     item 2-2
 ---
 ```
+
+---
 
 ### Control Blank Line : Delete : Auto
 
 - If there are consecutive blank lines, reduce one blank line from the block
 - If there is only a single blank line, delete the blank lines.
 
-If this function is performed consecutively, it is as if [Delete : Decrease One Line], [Delete : Combine One Line], and [Delete : All] were all performed.
+If executed consecutively, it is the same as if the following were executed in sequence.
+- [Delete : Decrease One Line]
+- [Delete : Combine One Line]
+- [Delete : All]
 
+This function seems to be the most useful, so I have set the default key bindings
+
+---
 
 ### Control Blank Line : Add : Increase One Line
 
