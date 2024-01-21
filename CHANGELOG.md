@@ -2,6 +2,7 @@
 
 ## [1.4.3] - 2024/01/21 Sun
 - fix select problem
+- fix select only blank lines
 
 ## [1.4.2] - 2024/01/21 Sun
 - Refactoring

@@ -1,5 +1,6 @@
 const { isBoolean } = require(`./type/isBoolean.js`);
 const { isUndefined } = require(`./type/isUndefined.js`);
+const { isNull } = require(`./type/isNull.js`);
 const { isNumber } = require(`./type/isNumber.js`);
 const { __max } = require(`./array/__max.js`);
 const { _indexOfFirst } = require(`./string/_indexOfFirst.js`);
@@ -25,7 +26,8 @@ array._deleteIndex = require(`./array/operation/_deleteIndex.js`)._deleteIndex;
 array._add = require(`./array/operation/_add.js`)._add;
 
 module.exports = {
-  isUndefined, isBoolean, isNumber,
+  isUndefined, isNull,
+  isBoolean, isNumber,
   __max,
   _indexOfFirst, _indexOfLast,
   _isFirst, _isLast,

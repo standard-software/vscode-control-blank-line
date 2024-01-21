@@ -6,7 +6,7 @@ const {
 } = require(`./lib/libVSCode.js`);
 
 const {
-  isUndefined,
+  isUndefined, isNull,
   _excludeLast,
   array,
 } = require(`./parts/parts.js`);
@@ -43,7 +43,6 @@ const getBlankLineInfos = ({ lines, continueInfo }) => {
   return blankLineContinueInfos;
 };
 
-
 function activate(context) {
 
   const extensionMain = (commandName) => {
@@ -66,22 +65,33 @@ function activate(context) {
             0,
           );
 
-          const text = editor.document.getText(range);
-          // Always end with \n
+          const _text = editor.document.getText(range);
+          const text = _excludeLast(_text, `\n`);
+          // _text: Always end with \n
+          // text: Always end without \n
 
           const result = func(range, text);
+          // result: null | '' | ...
 
           const startLine = select.start.line + startLineOffset;
-          const textSplit = _excludeLast(text, `\n`).split(`\n`);
+          const textSplit = text.split(`\n`);
           let endLine = startLine + textSplit.length - 1;
           let endLineCharacter = textSplit[textSplit.length - 1].length;
           if (!isUndefined(result) && text !== result) {
-            edit.replace(range, result);
+            if (isNull(result)){
+              edit.replace(range, ``);
 
-            const resultSplit = _excludeLast(result, `\n`).split(`\n`);
-            startLineOffset += resultSplit.length - textSplit.length;
-            endLine = startLine + resultSplit.length - 1;
-            endLineCharacter = resultSplit[resultSplit.length - 1].length;
+              startLineOffset += - textSplit.length;
+              endLine = startLine;
+              endLineCharacter = 0;
+            } else {
+              edit.replace(range, result + `\n`);
+
+              const resultSplit = result.split(`\n`);
+              startLineOffset += resultSplit.length - textSplit.length;
+              endLine = startLine + resultSplit.length - 1;
+              endLineCharacter = resultSplit[resultSplit.length - 1].length;
+            }
           }
 
           runAfterSelections.push(
@@ -104,10 +114,7 @@ function activate(context) {
       case `DeleteAuto`: {
         editorSelectionsLoop(editor, (range, text) => {
 
-          // no select
-          if (text === ``) { return; }
-
-          const lines = _excludeLast(text, `\n`).split(`\n`);
+          const lines = text.split(`\n`);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -116,7 +123,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return ``;
+              return null;
             }
             return;
           }
@@ -153,17 +160,14 @@ function activate(context) {
             };
           }
 
-          return lines.join(`\n`) + `\n`;
+          return lines.length === 0 ? null : lines.join(`\n`);
         });
       }; break;
 
       case `DeleteBlankLines`: {
         editorSelectionsLoop(editor, (range, text) => {
 
-          // no select
-          if (text === ``) { return; }
-
-          const lines = _excludeLast(text, `\n`).split(`\n`);
+          const lines = text.split(`\n`);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -172,7 +176,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return ``;
+              return null;
             }
             return;
           }
@@ -190,17 +194,14 @@ function activate(context) {
             array._deleteIndex(lines, info.index);
           }
 
-          return lines.join(`\n`) + `\n`;
+          return lines.length === 0 ? null : lines.join(`\n`);
         });
       }; break;
 
       case `CombineBlankLinesOne`: {
         editorSelectionsLoop(editor, (range, text) => {
 
-          // no select
-          if (text === ``) { return; }
-
-          const lines = _excludeLast(text, `\n`).split(`\n`);
+          const lines = text.split(`\n`);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -235,17 +236,14 @@ function activate(context) {
             array._deleteIndex(lines, index);
           }
 
-          return lines.join(`\n`) + `\n`;
+          return lines.length === 0 ? null : lines.join(`\n`);
         });
       }; break;
 
       case `DecreaseBlankLinesOne`: {
         editorSelectionsLoop(editor, (range, text) => {
 
-          // no select
-          if (text === ``) { return; }
-
-          const lines = _excludeLast(text, `\n`).split(`\n`);
+          const lines = text.split(`\n`);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -254,7 +252,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return ``;
+              return null;
             }
             return;
           }
@@ -279,17 +277,14 @@ function activate(context) {
             }
           };
 
-          return lines.join(`\n`) + `\n`;
+          return lines.length === 0 ? null : lines.join(`\n`);
         });
       }; break;
 
       case `IncreaseBlankLinesOne`: {
         editorSelectionsLoop(editor, (range, text) => {
 
-          // no select
-          if (text === ``) { return; }
-
-          const lines = _excludeLast(text, `\n`).split(`\n`);
+          const lines = text.split(`\n`);
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -304,7 +299,7 @@ function activate(context) {
                 0,
               );
 
-              return lines.join(`\n`) + `\n`;
+              return lines.join(`\n`);
             }
             return;
           }
@@ -333,7 +328,7 @@ function activate(context) {
             }
           }
 
-          return lines.join(`\n`) + `\n`;
+          return lines.join(`\n`);
         });
       }; break;
 
