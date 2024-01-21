@@ -97,255 +97,255 @@ function activate(context) {
       editor.selections = runAfterSelections;
     };
 
-      switch (commandName) {
+    switch (commandName) {
 
-        case `DeleteAuto`: {
-          editorSelectionsLoop(editor, (range, text) => {
+      case `DeleteAuto`: {
+        editorSelectionsLoop(editor, (range, text) => {
 
-            // no select
-            if (text === ``) { return; }
+          // no select
+          if (text === ``) { return; }
 
-            const isLastLf = _isLast(text, `\n`);
-            const lines = _excludeLast(text, `\n`).split(`\n`);
-            // console.log(`DeleteAuto`, text, text===`\n`, lines);
+          const isLastLf = _isLast(text, `\n`);
+          const lines = _excludeLast(text, `\n`).split(`\n`);
+          // console.log(`DeleteAuto`, text, text===`\n`, lines);
 
-            if (lines.length === 0) {
-              throw new Error(`extension:control-blank-line`);
+          if (lines.length === 0) {
+            throw new Error(`extension:control-blank-line`);
+          }
+
+          // select one line
+          if (lines.length === 1) {
+            if (lines[0].trim() === ``) {
+              return ``;
             }
+            return;
+          }
 
-            // select one line
-            if (lines.length === 1) {
-              if (lines[0].trim() === ``) {
-                return ``;
-              }
-              return;
-            }
-
-            // select over two lines
-            const blankLineInfos = getBlankLineInfos({
-              lines, continueInfo: true
-            });
-
-            if (blankLineInfos.some(info => info.continue)) {
-              // exists continue blank line -> decrease one
-              let continueFlag = false;
-              for (
-                const info of blankLineInfos
-                .reverse()
-              ) {
-                if (info.continue) {
-                  if (continueFlag === false) {
-                    array._deleteIndex(lines, info.index);
-                  }
-                  continueFlag = true;
-                } else {
-                  continueFlag = false;
-                }
-              };
-            } else {
-              // no exists continue blank line -> delete
-              for (
-                const info of blankLineInfos
-                .filter(info => info.blank)
-                .reverse()
-              ) {
-                array._deleteIndex(lines, info.index);
-              };
-            }
-
-            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          // select over two lines
+          const blankLineInfos = getBlankLineInfos({
+            lines, continueInfo: true
           });
-        }; break;
 
-        case `DeleteBlankLines`: {
-          editorSelectionsLoop(editor, (range, text) => {
-
-            // no select
-            if (text === ``) { return; }
-
-            const isLastLf = _isLast(text, `\n`);
-            const lines = _excludeLast(text, `\n`).split(`\n`);
-
-            if (lines.length === 0) {
-              throw new Error(`extension:control-blank-line`);
-            }
-
-            // select one line
-            if (lines.length === 1) {
-              if (lines[0].trim() === ``) {
-                return ``;
+          if (blankLineInfos.some(info => info.continue)) {
+            // exists continue blank line -> decrease one
+            let continueFlag = false;
+            for (
+              const info of blankLineInfos
+              .reverse()
+            ) {
+              if (info.continue) {
+                if (continueFlag === false) {
+                  array._deleteIndex(lines, info.index);
+                }
+                continueFlag = true;
+              } else {
+                continueFlag = false;
               }
-              return;
-            }
-
-            // select over two lines
-            const blankLineInfos = getBlankLineInfos({
-              lines, continueInfo: false
-            });
-
+            };
+          } else {
+            // no exists continue blank line -> delete
             for (
               const info of blankLineInfos
               .filter(info => info.blank)
               .reverse()
             ) {
               array._deleteIndex(lines, info.index);
-            }
-
-            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
-          });
-        }; break;
-
-        case `CombineBlankLinesOne`: {
-          editorSelectionsLoop(editor, (range, text) => {
-
-            // no select
-            if (text === ``) { return; }
-
-            const isLastLf = _isLast(text, `\n`);
-            const lines = _excludeLast(text, `\n`).split(`\n`);
-
-            if (lines.length === 0) {
-              throw new Error(`extension:control-blank-line`);
-            }
-
-            // select one line
-            if (lines.length === 1) { return; }
-
-            // select over two lines
-            const blankLineInfos = getBlankLineInfos({
-              lines, continueInfo: true
-            });
-
-            const deleteIndexs = [];
-            let continueFlag = false;
-            for (
-              const info of blankLineInfos
-            ) {
-              if (info.continue) {
-                if (continueFlag === true) {
-                  deleteIndexs.push(info.index);
-               }
-                continueFlag = true;
-              } else {
-                continueFlag = false;
-              }
             };
-            for (
-              const index of deleteIndexs
-              .reverse()
-            ) {
-              array._deleteIndex(lines, index);
-            }
+          }
 
-            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+        });
+      }; break;
+
+      case `DeleteBlankLines`: {
+        editorSelectionsLoop(editor, (range, text) => {
+
+          // no select
+          if (text === ``) { return; }
+
+          const isLastLf = _isLast(text, `\n`);
+          const lines = _excludeLast(text, `\n`).split(`\n`);
+
+          if (lines.length === 0) {
+            throw new Error(`extension:control-blank-line`);
+          }
+
+          // select one line
+          if (lines.length === 1) {
+            if (lines[0].trim() === ``) {
+              return ``;
+            }
+            return;
+          }
+
+          // select over two lines
+          const blankLineInfos = getBlankLineInfos({
+            lines, continueInfo: false
           });
-        }; break;
 
-        case `DecreaseBlankLinesOne`: {
-          editorSelectionsLoop(editor, (range, text) => {
+          for (
+            const info of blankLineInfos
+            .filter(info => info.blank)
+            .reverse()
+          ) {
+            array._deleteIndex(lines, info.index);
+          }
 
-            // no select
-            if (text === ``) { return; }
+          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+        });
+      }; break;
 
-            const isLastLf = _isLast(text, `\n`);
-            const lines = _excludeLast(text, `\n`).split(`\n`);
+      case `CombineBlankLinesOne`: {
+        editorSelectionsLoop(editor, (range, text) => {
 
-            if (lines.length === 0) {
-              throw new Error(`extension:control-blank-line`);
-            }
+          // no select
+          if (text === ``) { return; }
 
-            // select one line
-            if (lines.length === 1) {
-              if (lines[0].trim() === ``) {
-                return ``;
-              }
-              return;
-            }
+          const isLastLf = _isLast(text, `\n`);
+          const lines = _excludeLast(text, `\n`).split(`\n`);
 
-            // select over two lines
-            const blankLineInfos = getBlankLineInfos({
-              lines, continueInfo: false
-            });
+          if (lines.length === 0) {
+            throw new Error(`extension:control-blank-line`);
+          }
 
-            let blankFlag = false;
-            for (
-              const info of blankLineInfos
-              .reverse()
-            ) {
-              if (info.blank) {
-                if (blankFlag === false) {
-                  array._deleteIndex(lines, info.index);
-                }
-                blankFlag = true;
-              } else {
-                blankFlag = false;
-              }
-            };
+          // select one line
+          if (lines.length === 1) { return; }
 
-            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          // select over two lines
+          const blankLineInfos = getBlankLineInfos({
+            lines, continueInfo: true
           });
-        }; break;
 
-        case `IncreaseBlankLinesOne`: {
-          editorSelectionsLoop(editor, (range, text) => {
-
-            // no select
-            if (text === ``) { return; }
-
-            const isLastLf = _isLast(text, `\n`);
-            const lines = _excludeLast(text, `\n`).split(`\n`);
-
-            if (lines.length === 0) {
-              throw new Error(`extension:control-blank-line`);
+          const deleteIndexs = [];
+          let continueFlag = false;
+          for (
+            const info of blankLineInfos
+          ) {
+            if (info.continue) {
+              if (continueFlag === true) {
+                deleteIndexs.push(info.index);
+              }
+              continueFlag = true;
+            } else {
+              continueFlag = false;
             }
+          };
+          for (
+            const index of deleteIndexs
+            .reverse()
+          ) {
+            array._deleteIndex(lines, index);
+          }
 
-            // select one line
-            if (lines.length === 1) {
-              if (lines[0].trim() === ``) {
+          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+        });
+      }; break;
+
+      case `DecreaseBlankLinesOne`: {
+        editorSelectionsLoop(editor, (range, text) => {
+
+          // no select
+          if (text === ``) { return; }
+
+          const isLastLf = _isLast(text, `\n`);
+          const lines = _excludeLast(text, `\n`).split(`\n`);
+
+          if (lines.length === 0) {
+            throw new Error(`extension:control-blank-line`);
+          }
+
+          // select one line
+          if (lines.length === 1) {
+            if (lines[0].trim() === ``) {
+              return ``;
+            }
+            return;
+          }
+
+          // select over two lines
+          const blankLineInfos = getBlankLineInfos({
+            lines, continueInfo: false
+          });
+
+          let blankFlag = false;
+          for (
+            const info of blankLineInfos
+            .reverse()
+          ) {
+            if (info.blank) {
+              if (blankFlag === false) {
+                array._deleteIndex(lines, info.index);
+              }
+              blankFlag = true;
+            } else {
+              blankFlag = false;
+            }
+          };
+
+          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+        });
+      }; break;
+
+      case `IncreaseBlankLinesOne`: {
+        editorSelectionsLoop(editor, (range, text) => {
+
+          // no select
+          if (text === ``) { return; }
+
+          const isLastLf = _isLast(text, `\n`);
+          const lines = _excludeLast(text, `\n`).split(`\n`);
+
+          if (lines.length === 0) {
+            throw new Error(`extension:control-blank-line`);
+          }
+
+          // select one line
+          if (lines.length === 1) {
+            if (lines[0].trim() === ``) {
+              array._add(
+                lines,
+                [lines[0]],
+                0,
+              );
+
+              return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+            }
+            return;
+          }
+
+          // select over two lines
+          const blankLineInfos = getBlankLineInfos({
+            lines, continueInfo: false
+          });
+
+          let blankFlag = false;
+          for (
+            const info of blankLineInfos
+            .reverse()
+          ) {
+            if (info.blank) {
+              if (blankFlag === false) {
                 array._add(
                   lines,
-                  [lines[0]],
-                  0,
+                  [lines[info.index]],
+                  info.index,
                 );
-
-                return lines.join(`\n`) + (isLastLf ? `\n` : ``);
               }
-              return;
+              blankFlag = true;
+            } else {
+              blankFlag = false;
             }
+          }
 
-            // select over two lines
-            const blankLineInfos = getBlankLineInfos({
-              lines, continueInfo: false
-            });
+          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+        });
+      }; break;
 
-            let blankFlag = false;
-            for (
-              const info of blankLineInfos
-              .reverse()
-            ) {
-              if (info.blank) {
-                if (blankFlag === false) {
-                  array._add(
-                    lines,
-                    [lines[info.index]],
-                    info.index,
-                  );
-                }
-                blankFlag = true;
-              } else {
-                blankFlag = false;
-              }
-            }
+      default: {
+        throw new Error(`extension:control-blank-line`);
+      };
 
-            return lines.join(`\n`) + (isLastLf ? `\n` : ``);
-          });
-        }; break;
-
-        default: {
-          throw new Error(`extension:control-blank-line`);
-        };
-
-      }
+    }
 
   };
 
