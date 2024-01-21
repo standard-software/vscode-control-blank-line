@@ -71,30 +71,25 @@ function activate(context) {
 
           const result = func(range, text);
 
-          if (isUndefined(result) || text === result) {
-            const startLine = select.start.line + startLineOffset;
-            runAfterSelections.push(
-              new vscode.Selection(
-                startLine,
-                select.start.character,
-                startLine + text.split(`\n`).length - 1,
-                select.end.character,
-              )
-            );
-            continue;
-          }
-          edit.replace(range, result);
-
           const startLine = select.start.line + startLineOffset;
+          const textSplitLength = text.split(`\n`).length;
+          let endLine = startLine + textSplitLength - 1;
+          if (!isUndefined(result) && text !== result) {
+            edit.replace(range, result);
+
+            const resultSplitLength = result.split(`\n`).length;
+            startLineOffset += resultSplitLength - textSplitLength;
+            endLine = startLine + resultSplitLength - 1;
+          }
+
           runAfterSelections.push(
             new vscode.Selection(
               startLine,
               select.start.character,
-              startLine + result.split(`\n`).length - 1,
+              endLine,
               select.end.character,
             )
           );
-          startLineOffset += result.split(`\n`).length - text.split(`\n`).length;
 
         };
       });
