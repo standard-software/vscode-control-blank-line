@@ -51,26 +51,56 @@ function activate(context) {
 
     const editor = getEditor(); if (!editor) { return; }
 
-    const editorSelectionsLoop = (edit, func) => {
-      for(const select of editor.selections) {
-        const range = new vscode.Range(
-          select.start.line, 0,
-          select.end.line, select.end.character
-        );
-        const text = editor.document.getText(range);
-        const result = func(range, text);
-        if (isUndefined(result)) { continue; }
-        if (text === result) { continue; }
-        if (edit.replace(range, result)) {}
-      };
-    };
+    const editorSelectionsLoop = (editor, func) => {
+      const runAfterSelections = [];
+      editor.edit(edit => {
+        let startLineOffset = 0;
+        for(const [i, select] of editor.selections.entries()) {
+          const range = new vscode.Range(
+            select.start.line, 0,
+            select.end.line,
+            editor.document.lineAt(select.end.line).text.length,
+          );
 
-    editor.edit(edit => {
+          const text = editor.document.getText(range);
+
+          const result = func(range, text);
+
+          if (isUndefined(result) || text === result) {
+            const startLine = select.start.line + startLineOffset;
+            runAfterSelections.push(
+              new vscode.Selection(
+                startLine,
+                select.start.character,
+                startLine + text.split(`\n`).length - 1,
+                select.end.character,
+              )
+            );
+            continue;
+          }
+          edit.replace(range, result);
+
+          const startLine = select.start.line + startLineOffset;
+          runAfterSelections.push(
+            new vscode.Selection(
+              startLine,
+              select.start.character,
+              startLine + result.split(`\n`).length - 1,
+              select.end.character,
+            )
+          );
+          startLineOffset += result.split(`\n`).length - text.split(`\n`).length;
+
+        };
+      });
+
+      editor.selections = runAfterSelections;
+    };
 
       switch (commandName) {
 
         case `DeleteAuto`: {
-          editorSelectionsLoop(edit, (range, text) => {
+          editorSelectionsLoop(editor, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -128,7 +158,7 @@ function activate(context) {
         }; break;
 
         case `DeleteBlankLines`: {
-          editorSelectionsLoop(edit, (range, text) => {
+          editorSelectionsLoop(editor, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -166,7 +196,7 @@ function activate(context) {
         }; break;
 
         case `CombineBlankLinesOne`: {
-          editorSelectionsLoop(edit, (range, text) => {
+          editorSelectionsLoop(editor, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -212,7 +242,7 @@ function activate(context) {
         }; break;
 
         case `DecreaseBlankLinesOne`: {
-          editorSelectionsLoop(edit, (range, text) => {
+          editorSelectionsLoop(editor, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -257,7 +287,7 @@ function activate(context) {
         }; break;
 
         case `IncreaseBlankLinesOne`: {
-          editorSelectionsLoop(edit, (range, text) => {
+          editorSelectionsLoop(editor, (range, text) => {
 
             // no select
             if (text === ``) { return; }
@@ -316,7 +346,6 @@ function activate(context) {
         };
 
       }
-    } );
 
   };
 
