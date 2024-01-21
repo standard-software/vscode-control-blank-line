@@ -7,7 +7,6 @@ const {
 
 const {
   isUndefined,
-  _isLast,
   _excludeLast,
   array,
 } = require(`./parts/parts.js`);
@@ -63,31 +62,34 @@ function activate(context) {
         ) {
           const range = new vscode.Range(
             select.start.line, 0,
-            select.end.line,
-            editor.document.lineAt(select.end.line).text.length,
+            select.end.line + 1,
+            0,
           );
 
           const text = editor.document.getText(range);
+          // Always end with \n
 
           const result = func(range, text);
 
           const startLine = select.start.line + startLineOffset;
-          const textSplitLength = text.split(`\n`).length;
-          let endLine = startLine + textSplitLength - 1;
+          const textSplit = _excludeLast(text, `\n`).split(`\n`);
+          let endLine = startLine + textSplit.length - 1;
+          let endLineCharacter = textSplit[textSplit.length - 1].length;
           if (!isUndefined(result) && text !== result) {
             edit.replace(range, result);
 
-            const resultSplitLength = result.split(`\n`).length;
-            startLineOffset += resultSplitLength - textSplitLength;
-            endLine = startLine + resultSplitLength - 1;
+            const resultSplit = _excludeLast(result, `\n`).split(`\n`);
+            startLineOffset += resultSplit.length - textSplit.length;
+            endLine = startLine + resultSplit.length - 1;
+            endLineCharacter = resultSplit[resultSplit.length - 1].length;
           }
 
           runAfterSelections.push(
             new vscode.Selection(
               startLine,
-              select.start.character,
+              0,
               endLine,
-              select.end.character,
+              endLineCharacter,
             )
           );
 
@@ -105,7 +107,6 @@ function activate(context) {
           // no select
           if (text === ``) { return; }
 
-          const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
 
           if (lines.length === 0) {
@@ -152,7 +153,7 @@ function activate(context) {
             };
           }
 
-          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + `\n`;
         });
       }; break;
 
@@ -162,7 +163,6 @@ function activate(context) {
           // no select
           if (text === ``) { return; }
 
-          const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
 
           if (lines.length === 0) {
@@ -190,7 +190,7 @@ function activate(context) {
             array._deleteIndex(lines, info.index);
           }
 
-          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + `\n`;
         });
       }; break;
 
@@ -200,7 +200,6 @@ function activate(context) {
           // no select
           if (text === ``) { return; }
 
-          const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
 
           if (lines.length === 0) {
@@ -236,7 +235,7 @@ function activate(context) {
             array._deleteIndex(lines, index);
           }
 
-          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + `\n`;
         });
       }; break;
 
@@ -246,7 +245,6 @@ function activate(context) {
           // no select
           if (text === ``) { return; }
 
-          const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
 
           if (lines.length === 0) {
@@ -281,7 +279,7 @@ function activate(context) {
             }
           };
 
-          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + `\n`;
         });
       }; break;
 
@@ -291,7 +289,6 @@ function activate(context) {
           // no select
           if (text === ``) { return; }
 
-          const isLastLf = _isLast(text, `\n`);
           const lines = _excludeLast(text, `\n`).split(`\n`);
 
           if (lines.length === 0) {
@@ -307,7 +304,7 @@ function activate(context) {
                 0,
               );
 
-              return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+              return lines.join(`\n`) + `\n`;
             }
             return;
           }
@@ -336,7 +333,7 @@ function activate(context) {
             }
           }
 
-          return lines.join(`\n`) + (isLastLf ? `\n` : ``);
+          return lines.join(`\n`) + `\n`;
         });
       }; break;
 

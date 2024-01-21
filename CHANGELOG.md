@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.4.3] - 2024/01/21 Sun
+- fix select problem
+
 ## [1.4.2] - 2024/01/21 Sun
 - Refactoring
 - fix multi select problem
