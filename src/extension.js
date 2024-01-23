@@ -50,63 +50,77 @@ function activate(context) {
     const editor = getEditor(); if (!editor) { return; }
 
     const editorSelectionsLoop = (editor, func) => {
-      const runAfterSelections = [];
-      editor.edit(edit => {
-        let startLineOffset = 0;
-        for(
-          const select of [...editor.selections]
-          .sort((a, b) => {
-            return a.start.line - b.start.line;
-          })
-        ) {
+
+      const replaceTexts = [];
+      for (const selection of editor.selections) {
+        const range = new vscode.Range(
+          selection.start.line, 0,
+          selection.end.line + 1,
+          0,
+        );
+        const _text = editor.document.getText(range);
+        const text = _excludeLast(_text, `\n`);
+        // _text: Always end with \n
+        // text: Always end without \n
+
+        const result = func(range, text);
+        // result: null | '' | ...
+
+        console.log({range, _text, result});
+
+        if (!isUndefined(result) && text !== result) {
+          if (isNull(result)){
+            replaceTexts.push(``);
+          } else {
+            replaceTexts.push(result + `\n`);
+          }
+        } else {
+          replaceTexts.push(undefined);
+        }
+      }
+
+      editor.edit(editBuilder => {
+        for (const [i, selection] of editor.selections.entries()) {
+
+          if (isUndefined(replaceTexts[i])) { continue; }
+
           const range = new vscode.Range(
-            select.start.line, 0,
-            select.end.line + 1,
+            selection.start.line, 0,
+            selection.end.line + 1,
             0,
           );
+          editBuilder.replace(range, replaceTexts[i]);
 
-          const _text = editor.document.getText(range);
-          const text = _excludeLast(_text, `\n`);
-          // _text: Always end with \n
-          // text: Always end without \n
-
-          const result = func(range, text);
-          // result: null | '' | ...
-
-          const startLine = select.start.line + startLineOffset;
-          const textSplit = text.split(`\n`);
-          let endLine = startLine + textSplit.length - 1;
-          let endLineCharacter = textSplit[textSplit.length - 1].length;
-          if (!isUndefined(result) && text !== result) {
-            if (isNull(result)){
-              edit.replace(range, ``);
-
-              startLineOffset += - textSplit.length;
-              endLine = startLine;
-              endLineCharacter = 0;
-            } else {
-              edit.replace(range, result + `\n`);
-
-              const resultSplit = result.split(`\n`);
-              startLineOffset += resultSplit.length - textSplit.length;
-              endLine = startLine + resultSplit.length - 1;
-              endLineCharacter = resultSplit[resultSplit.length - 1].length;
-            }
+        }
+      }).then(() => {
+        const newSelections = [];
+        for (const [i, selection] of editor.selections.entries()) {
+          if (isUndefined(replaceTexts[i])) {
+            newSelections.push(selection);
+            continue;
           }
 
-          runAfterSelections.push(
-            new vscode.Selection(
-              startLine,
-              0,
-              endLine,
-              endLineCharacter,
-            )
+          console.log(
+            selection.start.line,
+            0,
+            selection.end.line - 1,
+            _excludeLast(replaceTexts[i], `\n`).split(`\n`).at(-1).length,
           );
 
-        };
+          const replaceTextLines = _excludeLast(replaceTexts[i], `\n`).split(`\n`);
+
+          newSelections.push(
+            new vscode.Selection(
+              selection.start.line,
+              0,
+              selection.start.line + replaceTextLines.length - 1,
+              replaceTextLines.at(-1).length,
+            )
+          );
+        }
+        editor.selections = newSelections;
       });
 
-      editor.selections = runAfterSelections;
     };
 
     switch (commandName) {
