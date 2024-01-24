@@ -51,7 +51,7 @@ function activate(context) {
 
     const editorSelectionsLoop = (editor, func) => {
 
-      const replaceTexts = [];
+      const results = [];
       for (const selection of editor.selections) {
         const range = new vscode.Range(
           selection.start.line, 0,
@@ -63,20 +63,25 @@ function activate(context) {
         // _text: Always end with \n
         // text: Always end without \n
 
-        const result = func(range, text);
-        // result: null | '' | ...
+        const result = func(range, text.split(`\n`));
+        // result: undefined | [] | [''] | ...
 
-        if (text === result) {
-          replaceTexts.push(undefined);
+        if (isUndefined(result)) {
+          results.push(result);
+        } else if (result.length === 0) {
+          results.push(result);
+        } else if (text === result.join(`\n`)) {
+          results.push(undefined);
         } else {
-          replaceTexts.push(result);
+          results.push(result);
         }
       }
 
       editor.edit(editBuilder => {
         for (const [i, selection] of editor.selections.entries()) {
 
-          if (isUndefined(replaceTexts[i])) { continue; }
+          const result = results[i];
+          if (isUndefined(result)) { continue; }
 
           const range = new vscode.Range(
             selection.start.line, 0,
@@ -84,19 +89,19 @@ function activate(context) {
             0,
           );
           editBuilder.replace(range,
-            isNull(replaceTexts[i]) ? `` : (replaceTexts[i] + `\n`)
+            (result.length === 0) ? `` : (result.join(`\n`) + `\n`)
           );
         }
       }).then(() => {
         const newSelections = [];
         for (const [i, selection] of editor.selections.entries()) {
-          if (isUndefined(replaceTexts[i])) {
+          const result = results[i];
+          if (isUndefined(result)) {
             newSelections.push(selection);
             continue;
           }
 
-
-          if (isNull(replaceTexts[i])) {
+          if (result.length === 0) {
             newSelections.push(
               new vscode.Selection(
                 selection.start.line,
@@ -106,17 +111,15 @@ function activate(context) {
               )
             );
           } else {
-            const replaceTextLines = replaceTexts[i].split(`\n`);
             newSelections.push(
               new vscode.Selection(
                 selection.start.line,
                 0,
-                selection.start.line + replaceTextLines.length - 1,
-                replaceTextLines.at(-1).length,
+                selection.start.line + result.length - 1,
+                result.at(-1).length,
               )
             );
           }
-
 
         }
         editor.selections = newSelections;
@@ -127,9 +130,7 @@ function activate(context) {
     switch (commandName) {
 
       case `DeleteAuto`: {
-        editorSelectionsLoop(editor, (range, text) => {
-
-          const lines = text.split(`\n`);
+        editorSelectionsLoop(editor, (range, lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -138,7 +139,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return null;
+              return [];
             }
             return;
           }
@@ -175,14 +176,12 @@ function activate(context) {
             };
           }
 
-          return lines.length === 0 ? null : lines.join(`\n`);
+          return lines;
         });
       }; break;
 
       case `DeleteBlankLines`: {
-        editorSelectionsLoop(editor, (range, text) => {
-
-          const lines = text.split(`\n`);
+        editorSelectionsLoop(editor, (range, lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -191,7 +190,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return null;
+              return [];
             }
             return;
           }
@@ -209,14 +208,12 @@ function activate(context) {
             array._deleteIndex(lines, info.index);
           }
 
-          return lines.length === 0 ? null : lines.join(`\n`);
+          return lines;
         });
       }; break;
 
       case `CombineBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, text) => {
-
-          const lines = text.split(`\n`);
+        editorSelectionsLoop(editor, (range, lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -251,14 +248,12 @@ function activate(context) {
             array._deleteIndex(lines, index);
           }
 
-          return lines.length === 0 ? null : lines.join(`\n`);
+          return lines;
         });
       }; break;
 
       case `DecreaseBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, text) => {
-
-          const lines = text.split(`\n`);
+        editorSelectionsLoop(editor, (range, lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -267,7 +262,7 @@ function activate(context) {
           // select one line
           if (lines.length === 1) {
             if (lines[0].trim() === ``) {
-              return null;
+              return [];
             }
             return;
           }
@@ -292,14 +287,12 @@ function activate(context) {
             }
           };
 
-          return lines.length === 0 ? null : lines.join(`\n`);
+          return lines;
         });
       }; break;
 
       case `IncreaseBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, text) => {
-
-          const lines = text.split(`\n`);
+        editorSelectionsLoop(editor, (range, lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -314,7 +307,7 @@ function activate(context) {
                 0,
               );
 
-              return lines.join(`\n`);
+              return lines;
             }
             return;
           }
@@ -343,7 +336,7 @@ function activate(context) {
             }
           }
 
-          return lines.join(`\n`);
+          return lines;
         });
       }; break;
 
