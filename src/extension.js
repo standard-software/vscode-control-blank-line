@@ -66,16 +66,10 @@ function activate(context) {
         const result = func(range, text);
         // result: null | '' | ...
 
-        console.log({range, _text, result});
-
-        if (!isUndefined(result) && text !== result) {
-          if (isNull(result)){
-            replaceTexts.push(``);
-          } else {
-            replaceTexts.push(result + `\n`);
-          }
-        } else {
+        if (text === result) {
           replaceTexts.push(undefined);
+        } else {
+          replaceTexts.push(result);
         }
       }
 
@@ -89,8 +83,9 @@ function activate(context) {
             selection.end.line + 1,
             0,
           );
-          editBuilder.replace(range, replaceTexts[i]);
-
+          editBuilder.replace(range,
+            isNull(replaceTexts[i]) ? `` : (replaceTexts[i] + `\n`)
+          );
         }
       }).then(() => {
         const newSelections = [];
@@ -100,23 +95,29 @@ function activate(context) {
             continue;
           }
 
-          console.log(
-            selection.start.line,
-            0,
-            selection.end.line - 1,
-            _excludeLast(replaceTexts[i], `\n`).split(`\n`).at(-1).length,
-          );
 
-          const replaceTextLines = _excludeLast(replaceTexts[i], `\n`).split(`\n`);
+          if (isNull(replaceTexts[i])) {
+            newSelections.push(
+              new vscode.Selection(
+                selection.start.line,
+                0,
+                selection.start.line,
+                0,
+              )
+            );
+          } else {
+            const replaceTextLines = replaceTexts[i].split(`\n`);
+            newSelections.push(
+              new vscode.Selection(
+                selection.start.line,
+                0,
+                selection.start.line + replaceTextLines.length - 1,
+                replaceTextLines.at(-1).length,
+              )
+            );
+          }
 
-          newSelections.push(
-            new vscode.Selection(
-              selection.start.line,
-              0,
-              selection.start.line + replaceTextLines.length - 1,
-              replaceTextLines.at(-1).length,
-            )
-          );
+
         }
         editor.selections = newSelections;
       });
