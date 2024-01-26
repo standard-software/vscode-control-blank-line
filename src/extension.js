@@ -51,78 +51,44 @@ function activate(context) {
 
     const editorSelectionsLoop = (editor, func) => {
 
-      const results = [];
+      const newSelections = [];
       for (const selection of editor.selections) {
-        const range = new vscode.Range(
-          selection.start.line, 0,
-          selection.end.line + 1,
-          0,
+        newSelections.push(
+          new vscode.Selection(
+            selection.start.line, 0,
+            selection.end.line,
+            editor.document.lineAt(selection.end.line).text.length,
+          )
         );
-        const _text = editor.document.getText(range);
-        const text = _excludeLast(_text, `\n`);
-        // _text: Always end with \n
-        // text: Always end without \n
-
-        const result = func(range, text.split(`\n`));
-        // result: undefined | [] | [''] | ...
-
-        if (isUndefined(result)) {
-          results.push(result);
-        } else if (result.length === 0) {
-          results.push(result);
-        } else if (text === result.join(`\n`)) {
-          results.push(undefined);
-        } else {
-          results.push(result);
-        }
       }
+      editor.selections = newSelections;
 
       editor.edit(editBuilder => {
-        for (const [i, selection] of editor.selections.entries()) {
+        for (const selection of editor.selections) {
 
-          const result = results[i];
+          const text = editor.document.getText(selection);
+          // text: end without `\n`
+
+          const result = func(text.split(`\n`));
+          // result: undefined | [] | [``] | ['a', 'b']...
+
           if (isUndefined(result)) { continue; }
 
-          const range = new vscode.Range(
-            selection.start.line, 0,
-            selection.end.line + 1,
-            0,
-          );
-          editBuilder.replace(range,
-            (result.length === 0) ? `` : (result.join(`\n`) + `\n`)
-          );
-        }
-      }).then(() => {
-        const newSelections = [];
-        for (const [i, selection] of editor.selections.entries()) {
-          const result = results[i];
-          if (isUndefined(result)) {
-            newSelections.push(selection);
+          if (result.length === 0) {
+            editBuilder.delete(
+              new vscode.Range(
+                selection.start.line, 0,
+                selection.end.line + 1,
+                0,
+              )
+            );
             continue;
           }
 
-          if (result.length === 0) {
-            newSelections.push(
-              new vscode.Selection(
-                selection.start.line,
-                0,
-                selection.start.line,
-                0,
-              )
-            );
-          } else {
-            newSelections.push(
-              new vscode.Selection(
-                selection.start.line,
-                0,
-                selection.start.line + result.length - 1,
-                result.at(-1).length,
-              )
-            );
-          }
-
+          const resultText = result.join(`\n`);
+          if (resultText === text) { continue; }
+          editBuilder.replace(selection, resultText);
         }
-        editor.selections = newSelections;
       });
 
     };
@@ -130,7 +96,7 @@ function activate(context) {
     switch (commandName) {
 
       case `DeleteAuto`: {
-        editorSelectionsLoop(editor, (range, lines) => {
+        editorSelectionsLoop(editor, (lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -181,7 +147,7 @@ function activate(context) {
       }; break;
 
       case `DeleteBlankLines`: {
-        editorSelectionsLoop(editor, (range, lines) => {
+        editorSelectionsLoop(editor, (lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -213,7 +179,7 @@ function activate(context) {
       }; break;
 
       case `CombineBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, lines) => {
+        editorSelectionsLoop(editor, (lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -253,7 +219,7 @@ function activate(context) {
       }; break;
 
       case `DecreaseBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, lines) => {
+        editorSelectionsLoop(editor, (lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
@@ -292,7 +258,7 @@ function activate(context) {
       }; break;
 
       case `IncreaseBlankLinesOne`: {
-        editorSelectionsLoop(editor, (range, lines) => {
+        editorSelectionsLoop(editor, (lines) => {
 
           if (lines.length === 0) {
             throw new Error(`extension:control-blank-line`);
